@@ -1,12 +1,9 @@
 import XLSX from "xlsx";
 import User from "../models/user-model.js";
-import fs from "fs/promises";
 
 export async function uploadFile(req, res) {
     try {
-        const filePath = req.file.path;
-
-        const workbook = XLSX.readFile(filePath);
+        const workbook = XLSX.read(req.file.buffer, { type: "buffer" });
         const sheetName = workbook.SheetNames[0];
         const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
@@ -19,9 +16,9 @@ export async function uploadFile(req, res) {
             });
             await user.save();
         }
-        fs.unlink(filePath);
+
         res.status(200).json({ message: 'Data imported successfully!' });
-        } catch (err) {
+    } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Error importing data', error: err.message });
     }
