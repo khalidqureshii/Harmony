@@ -22,13 +22,6 @@ app.use(cors({
     exposedHeaders: "*",
     credentials: true,
 }));
-app.use(express.json());
-app.use("/api/auth", router);
-app.use("/api/chatroom", chatroomRouter);
-app.use("/api/chat", chatRouter);
-app.use("/api/file", fileRouter);
-app.use(errorMiddleware);
-
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
@@ -36,6 +29,13 @@ const io = new Server(server, {
         methods: "*", 
     },
 });
+app.use(express.json());
+app.use("/api/auth", router);
+app.use("/api/chatroom", chatroomRouter);
+app.use("/api/chat", chatRouter);
+app.use("/api/file", fileRouter);
+app.use(errorMiddleware);
+
 
 app.get('/', (req, res) => {
     res.json({msg:'Hello from Node.js on Vercel!'});
