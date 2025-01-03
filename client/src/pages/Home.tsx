@@ -1,9 +1,7 @@
 import { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../store/Auth";
 import Loader from "../components/Loader";
 import ChatroomCard from "../components/ChatroomCard";
-import { UserType } from "../store/Auth";
 import {
     Dialog,
     DialogContent,
@@ -18,11 +16,13 @@ import AddHeader from "@/components/headers/AddHeader";
 import { MessageSquarePlus } from "lucide-react";
 import { CardType } from "@/store/Types";
 import { createChatroom, fetchChatrooms, handleUpload } from "@/api/Home";
+import { useSelector } from "react-redux";
 
 
 function Home() {
     const navigate = useNavigate();
-    const {isLoggedIn} = useAuth();
+    const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
+    const userLoading = useSelector((state: any) => state.auth.userLoading);
     
     useEffect(() => {
         if (!isLoggedIn) {
@@ -34,7 +34,7 @@ function Home() {
         fetchChatroomsLocal();
     },[])
     
-    const {user}:{user:UserType} = useAuth();
+    const user = useSelector((state:any) => state.auth.user)
     const [isLoading, setLoading] = useState(true);
     const [chatrooms, setChatrooms] = useState([]);
     const [chatroomName, setChatroomName] = useState<string>("");
@@ -98,7 +98,7 @@ function Home() {
         }
     };
 
-    if (isLoading) return <><AddHeader addTrigger={setIsDialogOpen} fileAddTrigger={setIsUploadDialogOpen}/><Loader /></>;
+    if (userLoading || isLoading) return <><AddHeader addTrigger={setIsDialogOpen} fileAddTrigger={setIsUploadDialogOpen}/><Loader /></>;
 
     return <div className="w-full min-h-screen">
         <AddHeader addTrigger={setIsDialogOpen} fileAddTrigger={setIsUploadDialogOpen}/>

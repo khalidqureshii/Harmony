@@ -1,6 +1,5 @@
 import {useNavigate } from "react-router-dom";
 import { useState } from "react";
-import useAuth from "../../store/Auth";
 import img1 from "../../../public/logo.png";
 import img2 from "../../../public/manager.png";
 import img3 from "../../../public/logout.png";
@@ -14,10 +13,11 @@ import {
     DialogTitle,
   } from "@/components/ui/dialog"
 import DemoVideo from "../DemoVideo";
+import { useSelector } from "react-redux";
 
 function Header () {
     const navigate = useNavigate();
-    const {user} = useAuth();
+    const user = useSelector((state:any) => state.auth.user)
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
     return (

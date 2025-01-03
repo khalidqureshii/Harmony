@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import InputEntry from "../components/InputEntry";
-import useAuth from "../store/Auth";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import InputEntryPassword from "../components/InputEntryPassword";
@@ -14,12 +13,16 @@ import {
     DialogTitle,
   } from "@/components/ui/dialog"
 import DemoVideo from "@/components/DemoVideo";
+import { useDispatch, useSelector } from "react-redux";
+import { authenticateUser, storeToken } from "@/store/features/authSlice";
+import { AppDispatch } from "@/store/Store";
 
 function Register() {
     const navigate = useNavigate();
-    const {isLoggedIn} = useAuth();
-    const {storeTokenInLS}  = useAuth();
+    const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn)
+    const dispatch: AppDispatch = useDispatch();
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+    const userLoading = useSelector((state: any) => state.auth.userLoading);
     
     useEffect(() => {
         if (isLoggedIn) {
@@ -50,7 +53,8 @@ function Register() {
         setLoading(true);
         try {
             const response= await storeData(user);
-            storeTokenInLS(response.token);
+            dispatch(storeToken(response.token));
+            await dispatch(authenticateUser(response.token));
             toast.success("Successfully Registered");
             navigate("/home");
         }
@@ -62,7 +66,7 @@ function Register() {
         }
     }
 
-    if (isLoading) return <Loader />;
+    if (isLoading || userLoading) return <Loader />;
 
     return <div className="w-full h-90vh flex items-center justify-center">
         <div className="flex bg-credbg rounded-3xl overflow-hidden shadow-3xl mx-5 flex-wrap custom:py-0 py-10">

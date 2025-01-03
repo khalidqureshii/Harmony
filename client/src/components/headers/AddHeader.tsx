@@ -1,6 +1,5 @@
 import {useNavigate} from "react-router-dom";
 import { useState } from "react";
-import useAuth from "../../store/Auth";
 import {
     Dialog,
     DialogContent,
@@ -9,6 +8,7 @@ import {
     DialogTitle,
   } from "@/components/ui/dialog"
 import DemoVideo from "../DemoVideo";
+import { useSelector } from "react-redux";
 
 type headerType = {
     addTrigger: (x:boolean)=>void;
@@ -17,7 +17,7 @@ type headerType = {
 
 function AddHeader (props:headerType) {
     const navigate = useNavigate();
-    const {user} = useAuth();
+    const user = useSelector((state:any) => state.auth.user)
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
     return (

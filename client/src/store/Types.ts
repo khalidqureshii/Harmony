@@ -25,3 +25,12 @@ export type CardType = {
 export type RespType = {
     message:string
 }
+
+export type UserType = {
+    email:string,
+    isAdmin:boolean,
+    joinedOn:Date,
+    userId:number,
+    username:string,
+    _id:string
+}

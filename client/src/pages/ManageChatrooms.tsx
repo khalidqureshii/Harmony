@@ -1,10 +1,8 @@
 import { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../store/Auth";
 import Loader from "../components/Loader";
 import {toast} from "react-toastify";
 import ChatroomRow from "../components/ChatroomRow";
-import { UserType } from "../store/Auth";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -30,12 +28,15 @@ import { Label } from '@radix-ui/react-label';
 import { CardType } from "@/store/Types";
 import { deleteChatroom, editChatroom } from "@/api/ManageChatrooms";
 import { fetchChatrooms } from "@/api/Home";
+import { useSelector } from "react-redux";
 
 
 
 function ManageChatrooms() {
     const navigate = useNavigate();
-    const {user, isLoggedIn}:{user:UserType, isLoggedIn:boolean} = useAuth();
+    const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
+    const user = useSelector((state:any) => state.auth.user);
+    const userLoading = useSelector((state: any) => state.auth.userLoading);
 
     useEffect(() => {
         if (!isLoggedIn) {
@@ -112,7 +113,7 @@ function ManageChatrooms() {
         fetchChatroomsLocal();
     },[])
 
-    if (isLoading) return <Loader />;
+    if (userLoading || isLoading) return <Loader />;
 
     return <>
         <div className="w-full min-h-80vh">

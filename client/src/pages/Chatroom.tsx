@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
 import LINK from '../store/Link';
 import Loader from '../components/Loader';
-import useAuth from '../store/Auth';
 import { Send } from 'lucide-react';
 import { FaPenToSquare } from 'react-icons/fa6';
 import { FaTrashAlt } from 'react-icons/fa';
@@ -34,12 +33,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@radix-ui/react-label';
 import { deleteMessage, editMessage, fetchMessages, fetchChatroom } from '@/api/Chatroom';
+import { useSelector } from 'react-redux';
 
 
 const Chatroom = () => {
     const { chatroomId } = useParams();
-    const {isLoggedIn} = useAuth();
+    const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
     const [messages, setMessages] = useState<MessageType[]>([]);
+    const userLoading = useSelector((state: any) => state.auth.userLoading);
     
     useEffect(() => {
         if (!isLoggedIn) {
@@ -75,7 +76,7 @@ const Chatroom = () => {
     
     const chatEndRef = useRef<HTMLDivElement | null>(null);
     const navigate = useNavigate();
-    const { user } = useAuth();
+    const user = useSelector((state:any) => state.auth.user)
     const [chatroomData, setChatroomData] = useState<ChatroomType>({
         _id: '',
         chatroomName: '',
@@ -87,7 +88,7 @@ const Chatroom = () => {
     const [newMessage, setNewMessage] = useState<string>('');
     const [areMessagesSet, setMessagesSet] = useState<boolean>(false);
     const [socket, setSocket] = useState<Socket | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedMessage, setSelectedMessage] = useState<MessageType | null>(null);
     const [isAlertDialogOpen, setIsAlertDialogOpen] = useState<boolean>(false);
@@ -140,7 +141,7 @@ const Chatroom = () => {
             timestamp: msg.timestamp, 
             userId: msg.userId,
         };
-        setLoading(true);
+        setIsLoading(true);
         try {
             await deleteMessage(data); 
             toast.success("Successfully Deleted Message");
@@ -150,7 +151,7 @@ const Chatroom = () => {
             toast.error("Error Deleting Message");
         }
         finally {
-            setLoading(false);
+            setIsLoading(false);
         }
     }
     
@@ -165,7 +166,7 @@ const Chatroom = () => {
             userId: msg.userId,
             newMessage: newMessage
         };
-        setLoading(true);
+        setIsLoading(true);
         try{
             await editMessage(data); 
             toast.success("Successfully Edited Message");
@@ -175,13 +176,13 @@ const Chatroom = () => {
             toast.error("Error Editing Message");
         }
         finally {
-            setLoading(false);
+            setIsLoading(false);
         }
     }
 
     async function fetchMessagesLocal() {
         try {
-            setLoading(true);
+            setIsLoading(true);
             const response = await fetchMessages(Number(chatroomId));
             setMessages(response.chatrooms);
             setMessagesSet(true);
@@ -190,12 +191,12 @@ const Chatroom = () => {
             toast.error("Error Fetching Messages");
         }
         finally {
-            setLoading(false);
+            setIsLoading(false);
         }
     }
 
     async function fetchChatroomLocal() {
-        setLoading(true);
+        setIsLoading(true);
         try {
             const response = await fetchChatroom(Number(chatroomId));
             setChatroomData(response.chatroomInfo[0]);
@@ -204,11 +205,11 @@ const Chatroom = () => {
             toast.error("Error Fetching Chatroom");
         }
         finally {
-            setLoading(false);
+            setIsLoading(false);
         }
     }
 
-    if (loading) return <Loader />;
+    if (isLoading || userLoading) return <Loader />;
     return (
         <>
             <div className="flex flex-col justify-center items-center w-screen h-80vh">

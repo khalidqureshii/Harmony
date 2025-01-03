@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import InputEntry from "../components/InputEntry";
-import {useAuth} from "../store/Auth"
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import Loader from "../components/Loader";
 import InputEntryPassword from "../components/InputEntryPassword";
 import { storeData } from "@/api/Login";
+import { authenticateUser, storeToken } from "@/store/features/authSlice";
 
 import {
     Dialog,
@@ -15,11 +15,14 @@ import {
     DialogTitle,
   } from "@/components/ui/dialog"
 import DemoVideo from "@/components/DemoVideo";
-  
+import { useSelector, useDispatch } from "react-redux";
+import type { AppDispatch } from "../store/Store.js";
 
 function Login() {
+    const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
-    const {isLoggedIn} = useAuth();
+    const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
+    const userLoading = useSelector((state: any) => state.auth.userLoading);
     
     useEffect(() => {
         if (isLoggedIn) {
@@ -29,7 +32,6 @@ function Login() {
     
     const [isLoading, setLoading] = useState(false);
     const [user,setUser] = useState({email: "", password: ""});
-    const {storeTokenInLS} = useAuth();
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
     function updateUser(event: React.ChangeEvent<HTMLInputElement>) {
@@ -48,7 +50,8 @@ function Login() {
         try {
             const response = await storeData(user);
             toast.success("Successfully Logged in");
-            storeTokenInLS(response.token);
+            dispatch(storeToken(response.token));
+            await dispatch(authenticateUser(response.token));
         }
         catch (error) {
             if (error instanceof Error) toast.error(error.message);
@@ -58,7 +61,7 @@ function Login() {
         }
     }
 
-    if (isLoading) return <Loader />;
+    if (isLoading || userLoading) return <Loader />;
 
     return <div className="w-full h-90vh flex flex-row justify-center items-center">
         <div className="mx-5">
