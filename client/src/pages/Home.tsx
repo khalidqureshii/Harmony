@@ -98,7 +98,7 @@ function Home() {
         }
     };
 
-    if (userLoading || isLoading || true) return <><AddHeader addTrigger={setIsDialogOpen} fileAddTrigger={setIsUploadDialogOpen}/><Loader /></>;
+    if (userLoading || isLoading) return <><AddHeader addTrigger={setIsDialogOpen} fileAddTrigger={setIsUploadDialogOpen}/><Loader /></>;
 
     return <div className="w-full min-h-screen">
         <AddHeader addTrigger={setIsDialogOpen} fileAddTrigger={setIsUploadDialogOpen}/>
