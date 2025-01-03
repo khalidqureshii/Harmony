@@ -14,6 +14,7 @@ import {
     DialogHeader,
     DialogTitle,
   } from "@/components/ui/dialog"
+import DemoVideo from "@/components/DemoVideo";
   
 
 function Login() {
@@ -75,31 +76,13 @@ function Login() {
             </div>
         </div>
 
-        {/* <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent>
-                <DialogHeader>
-                <DialogTitle>Are you absolutely sure?</DialogTitle>
-                <DialogDescription>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/vflWLItnwfA?si=ifZysP5TeNp2Kpx6" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
-                </DialogDescription>
-                </DialogHeader>
-            </DialogContent>
-        </Dialog> */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogContent className="max-w-xl p-6 overflow-hidden">
                 <DialogHeader>
                     <DialogTitle className="mb-3">Demo Video</DialogTitle>
                     <DialogDescription>
                         <div className="relative w-full max-h-[315px] overflow-hidden">
-                            <iframe
-                                className="w-full h-[315px]"
-                                src="https://www.youtube.com/embed/vflWLItnwfA?si=ifZysP5TeNp2Kpx6"
-                                title="YouTube video player"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerPolicy="strict-origin-when-cross-origin"
-                                allowFullScreen
-                            ></iframe>
+                            <DemoVideo />
                         </div>
                     </DialogDescription>
                 </DialogHeader>

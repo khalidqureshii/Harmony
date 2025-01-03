@@ -1,5 +1,14 @@
-import {useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import { useState } from "react";
 import useAuth from "../../store/Auth";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+  } from "@/components/ui/dialog"
+import DemoVideo from "../DemoVideo";
 
 type headerType = {
     addTrigger: (x:boolean)=>void;
@@ -9,6 +18,7 @@ type headerType = {
 function AddHeader (props:headerType) {
     const navigate = useNavigate();
     const {user} = useAuth();
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
     return (
         <header className="py-4 customHeader">
@@ -20,6 +30,12 @@ function AddHeader (props:headerType) {
                     </div>
                 </button>
                 <div className="flex justify-center">
+                    <button onClick={() => {setIsDialogOpen(true)}} className="relative group flex flex-col items-center ml-5">
+                        <img src="youtube.png" style={{ width: "3rem", height: "auto", objectFit: "contain" }}/>
+                        <div className="absolute bottom-[-2.2rem] opacity-0 group-hover:opacity-100 transform scale-90 group-hover:scale-100 transition-all duration-300 ease-in-out bg-gray-800 text-white rounded-lg px-3 py-1">
+                            Demo
+                        </div>
+                    </button>
                     {(!user.isAdmin) ? null : (<>
                         <button onClick={() => {props.fileAddTrigger(true)}} className="relative group flex flex-col items-center ml-4" >
                             <img src="addUser.png" style={{ width: "2.8rem", height: "auto", objectFit: "contain" }} />
@@ -48,6 +64,19 @@ function AddHeader (props:headerType) {
                     </button>
                 </div>
             </div>
+
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogContent className="max-w-xl p-6 overflow-hidden">
+                    <DialogHeader>
+                        <DialogTitle className="mb-3">Demo Video</DialogTitle>
+                        <DialogDescription>
+                            <div className="relative w-full max-h-[315px] overflow-hidden">
+                                <DemoVideo />
+                            </div>
+                        </DialogDescription>
+                    </DialogHeader>
+                </DialogContent>
+            </Dialog>
         </header>
     );
     
