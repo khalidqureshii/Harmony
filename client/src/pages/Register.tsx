@@ -6,12 +6,19 @@ import {toast} from "react-toastify";
 import InputEntryPassword from "../components/InputEntryPassword";
 import Loader from "../components/Loader";
 import { storeData } from "@/api/Register";
-
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+  } from "@/components/ui/dialog"
 
 function Register() {
     const navigate = useNavigate();
     const {isLoggedIn} = useAuth();
     const {storeTokenInLS}  = useAuth();
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     
     useEffect(() => {
         if (isLoggedIn) {
@@ -69,8 +76,30 @@ function Register() {
                 <button type="submit" className="bg-blue-600 hover:bg-blue-500 text-white rounded-lg py-2 px-4 mt-3 shadow-lg" onClick={storeDataLocal}>Sign up</button>
 
                 <h2 className="text-lg mt-5 text-black">Already have an Account? <span className="text-blue-500 cursor-pointer" onClick={()=>navigate("/login")}>Log in</span></h2>
+                <h1 className="mt-3 text-lg text-rose-700 cursor-pointer" onClick={()=>setIsDialogOpen(true)}>Demo Video</h1>
             </div>
         </div>
+
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogContent className="max-w-xl p-6 overflow-hidden">
+                <DialogHeader>
+                    <DialogTitle className="mb-3">Demo Video</DialogTitle>
+                    <DialogDescription>
+                        <div className="relative w-full max-h-[315px] overflow-hidden">
+                            <iframe
+                                className="w-full h-[315px]"
+                                src="https://www.youtube.com/embed/vflWLItnwfA?si=ifZysP5TeNp2Kpx6"
+                                title="YouTube video player"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerPolicy="strict-origin-when-cross-origin"
+                                allowFullScreen
+                            ></iframe>
+                        </div>
+                    </DialogDescription>
+                </DialogHeader>
+            </DialogContent>
+        </Dialog>
     </div>
 }   
 

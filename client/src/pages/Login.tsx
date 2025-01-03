@@ -7,6 +7,15 @@ import Loader from "../components/Loader";
 import InputEntryPassword from "../components/InputEntryPassword";
 import { storeData } from "@/api/Login";
 
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+  } from "@/components/ui/dialog"
+  
+
 function Login() {
     const navigate = useNavigate();
     const {isLoggedIn} = useAuth();
@@ -20,6 +29,7 @@ function Login() {
     const [isLoading, setLoading] = useState(false);
     const [user,setUser] = useState({email: "", password: ""});
     const {storeTokenInLS} = useAuth();
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
     function updateUser(event: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = event.target;
@@ -60,9 +70,42 @@ function Login() {
                     <InputEntryPassword changeFunction={updateUser} name="password" text="Password" placeholder="Password"/>
                     <button className="bg-blue-600 hover:bg-blue-500 py-2 px-4 rounded-lg text-white mt-3 mb-2 shadow-lg" type="submit" onClick={storeDataLocal}>Log in</button>
                     <h2 className="text-lg text-black mt-3">Don't have an Account? <span className="text-blue-500 cursor-pointer" onClick={()=>navigate("/register")}>Sign up</span></h2>
+                    <h1 className="mt-3 text-lg text-rose-700 cursor-pointer" onClick={()=>setIsDialogOpen(true)}>Demo Video</h1>
                 </div>
             </div>
         </div>
+
+        {/* <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogContent>
+                <DialogHeader>
+                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                <DialogDescription>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/vflWLItnwfA?si=ifZysP5TeNp2Kpx6" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+                </DialogDescription>
+                </DialogHeader>
+            </DialogContent>
+        </Dialog> */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogContent className="max-w-xl p-6 overflow-hidden">
+                <DialogHeader>
+                    <DialogTitle className="mb-3">Demo Video</DialogTitle>
+                    <DialogDescription>
+                        <div className="relative w-full max-h-[315px] overflow-hidden">
+                            <iframe
+                                className="w-full h-[315px]"
+                                src="https://www.youtube.com/embed/vflWLItnwfA?si=ifZysP5TeNp2Kpx6"
+                                title="YouTube video player"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerPolicy="strict-origin-when-cross-origin"
+                                allowFullScreen
+                            ></iframe>
+                        </div>
+                    </DialogDescription>
+                </DialogHeader>
+            </DialogContent>
+        </Dialog>
+
     </div>
 }   
 
