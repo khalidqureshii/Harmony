@@ -58,6 +58,7 @@ const Chatroom = () => {
     }, [messages]);
     
     useEffect(() => {
+        console.log(chatroomId);
         const socketInstance = io(LINK); 
         setSocket(socketInstance);
   
