@@ -133,7 +133,7 @@ function Home() {
                     <DialogHeader>
                         <DialogTitle>Upload Excel Sheet</DialogTitle>
                     </DialogHeader>
-                    <Input id="newFile" type="file" accept=".xlsx, .xls" onChange={handleFileChange} className="w-full bg-blue-200 cursor-pointer" autoFocus/>
+                    <Input id="newFile" type="file" accept=".xlsx, .xls" onChange={handleFileChange} className="w-full bg-blue-200 cursor-pointer" autoFocus autoComplete="off"/>
                     <DialogFooter className="flex justify-end">
                         <Button onClick={()=>{setIsUploadDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Cancel</Button>
                         <Button onClick={()=>{handleUploadLocal(); setIsUploadDialogOpen(false)}} className='bg-blue-600 hover:bg-blue-400 text-white font-universal mb-2'>Upload</Button>
