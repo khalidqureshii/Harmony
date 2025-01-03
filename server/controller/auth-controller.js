@@ -31,12 +31,14 @@ const login = async (req, res)=> {
 
 const register = async (req, res)=> {
     try{
-        const {username, phone, email, password,isAdmin = false} = req.body;
-        const userExists = await User.findOne({username: username});
+        const {username, email, password,isAdmin = false} = req.body;
+        const userExists = await User.findOne({
+            $or: [{ username: username }, { email: email }],
+        });
         if (userExists) {
             return res.status(400).json({message: "User Already Exists"});
         }
-        const newUser = await User.create({username, phone, email, password, isAdmin});
+        const newUser = await User.create({username, email, password, isAdmin});
         res.status(200).json({message: "Registration Successful", token: await newUser.generateToken(), userId: newUser._id.toString()});
     }
     catch (err) {

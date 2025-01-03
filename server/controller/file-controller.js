@@ -8,12 +8,22 @@ export async function uploadFile(req, res) {
         const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
         for (const row of sheetData) {
+            const existingUser = await User.findOne({
+                $or: [{ username: row.Username }, { email: row.Email }],
+            });
+
+            if (existingUser) {
+                console.log(`Duplicate entry found: ${row.Username} or ${row.Email}`);
+                continue; 
+            }
+
             const user = new User({
-                username: row.Username, 
+                username: row.Username,
                 email: row.Email,
-                password: row.Password, 
+                password: row.Password,
                 isAdmin: false,
             });
+
             await user.save();
         }
 
