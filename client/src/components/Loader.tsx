@@ -14,7 +14,7 @@ function Loader() {
                 src="https://lottie.host/bddfdad6-93f7-48ab-b9e8-cc6411bcb982/Mo3yS0sWe1.lottie"
                 // Hamster
                 loop
-                style={{width:"30rem", height: "30rem"}}
+                className="w-[40rem] md:w-[60rem]"
                 autoplay
                 speed={1.1}
             />
