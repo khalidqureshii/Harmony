@@ -31,7 +31,7 @@ export default {
   	extend: {
 		screens: {
 			'custom': '1055px', 
-			'custom2': '490px'
+			'custom2': '560px'
 		},
   		height: {
   			'90vh': '90vh',

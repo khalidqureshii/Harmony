@@ -14,11 +14,11 @@ function Loader() {
                 src="https://lottie.host/bddfdad6-93f7-48ab-b9e8-cc6411bcb982/Mo3yS0sWe1.lottie"
                 // Hamster
                 loop
-                style={{width:500, height: 500}}
+                style={{width:"30rem", height: "30rem"}}
                 autoplay
                 speed={1.1}
             />
-            <h2 className="text-3xl font-bold">{serverMessage}</h2>
+            <h2 className="text-xl md:text-3xl font-bold">{serverMessage}</h2>
         </div>
     </div>;
 }

@@ -73,7 +73,7 @@ function Login() {
                     <InputEntry changeFunction={updateUser} name="email" text="Email" placeholder="Email" />
                     <InputEntryPassword changeFunction={updateUser} name="password" text="Password" placeholder="Password"/>
                     <button className="bg-blue-600 hover:bg-blue-500 py-2 px-4 rounded-lg text-white mt-3 mb-2 shadow-lg" type="submit" onClick={storeDataLocal}>Log in</button>
-                    <h2 className="text-lg text-black mt-3">Don't have an Account? <span className="text-blue-500 cursor-pointer" onClick={()=>navigate("/register")}>Sign up</span></h2>
+                    <h2 className="text-md md:text-lg text-black mt-3">Don't have an Account? <span className="text-blue-500 cursor-pointer" onClick={()=>navigate("/register")}>Sign up</span></h2>
                     <h1 className="mt-3 text-lg text-rose-700 cursor-pointer" onClick={()=>setIsDialogOpen(true)}>Demo Video</h1>
                 </div>
             </div>
