@@ -5,14 +5,6 @@ import {toast} from "react-toastify";
 import InputEntryPassword from "../components/InputEntryPassword";
 import Loader from "../components/Loader";
 import { storeData } from "@/api/Register";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-  } from "@/components/ui/dialog"
-import DemoVideo from "@/components/DemoVideo";
 import { useDispatch, useSelector } from "react-redux";
 import { authenticateUser, storeToken } from "@/store/features/authSlice";
 import { AppDispatch } from "@/store/Store";
@@ -21,7 +13,6 @@ function Register() {
     const navigate = useNavigate();
     const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn)
     const dispatch: AppDispatch = useDispatch();
-    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const userLoading = useSelector((state: any) => state.auth.userLoading);
     
     useEffect(() => {
@@ -81,22 +72,8 @@ function Register() {
                 <button type="submit" className="bg-blue-600 hover:bg-blue-500 text-white rounded-lg py-2 px-4 mt-3 shadow-lg" onClick={storeDataLocal}>Sign up</button>
 
                 <h2 className="text-lg mt-5 text-black">Already have an Account? <span className="text-blue-500 cursor-pointer" onClick={()=>navigate("/login")}>Log in</span></h2>
-                <h1 className="mt-3 text-lg text-rose-700 cursor-pointer" onClick={()=>setIsDialogOpen(true)}>Demo Video</h1>
             </div>
         </div>
-
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent className="max-w-xl p-6 overflow-hidden">
-                <DialogHeader>
-                    <DialogTitle className="mb-3">Demo Video</DialogTitle>
-                    <DialogDescription>
-                        <div className="relative w-full max-h-[315px] overflow-hidden">
-                            <DemoVideo />
-                        </div>
-                    </DialogDescription>
-                </DialogHeader>
-            </DialogContent>
-        </Dialog>
     </div>
 }   
 
