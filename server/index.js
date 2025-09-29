@@ -12,6 +12,9 @@ const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 app.use("/api/auth", router);
+app.use("/api/chat", router);
+app.use("/api/chatroom", router);
+app.use("/api/uic", router);
 app.use(errorMiddleware);
 
 connectDB().then( () => {
