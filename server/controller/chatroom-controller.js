@@ -9,10 +9,6 @@ export const addChatroom = async (req, res, next) => {
         if (chatroomExists) {
             return res.status(400).send({message: "Chatroom Already Exists"});
         }
-        const userDetails = await User.findOne({userId: creatorUserId});
-        if (!userDetails.isAdmin) {
-            return res.status(400).send({message: "User Does not have permission to Create Chatroom"});
-        }
         const newChatroom = await Chatroom.create({chatroomName, creatorUserId});
         res.status(200).json({message: `Successfully Created Chatroom ${chatroomName}`});
     }
@@ -33,7 +29,8 @@ export const removeChatroom = async (req, res, next) => {
     try{
         const {chatroomId, userId} = req.body;
         const userDetails = await User.findOne({userId: userId});
-        if (!userDetails.isAdmin) {
+        const chatroomDetails = await Chatroom.findOne({chatroomId: chatroomId});
+        if (!userDetails.isAdmin || !userDetails._id.equals(chatroomDetails.creatorUserId)) {
             return res.status(400).send({message: "User Does not have permission to Remove Chatroom"});
         }
         const deletion = await Chatroom.deleteOne({chatroomId: chatroomId});
