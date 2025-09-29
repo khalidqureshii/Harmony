@@ -1,4 +1,6 @@
 import UserInChatroom from "../models/user-in-chatroom-model.js";
+import Chatroom from "../models/chatroom-model.js";
+import User from "../models/user-model.js";
 
 export const approveUserInChatroom = async (req, res, next) => {
     try {
