@@ -1,4 +1,4 @@
-import LINK from "@/store/Link";
+import LINK from "../store/Link";
 
 export async function storeData(user: {email: string, password: string}) {
     const response = await fetch(LINK + "api/auth/login", {

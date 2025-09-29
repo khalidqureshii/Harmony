@@ -1,4 +1,4 @@
-import LINK from "@/store/Link";
+import LINK from "../store/Link";
 
 export async function storeData(user:{username: string, email: string, password: string}) {
     console.log(LINK);
