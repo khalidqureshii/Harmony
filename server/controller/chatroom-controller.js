@@ -10,6 +10,10 @@ export const addChatroom = async (req, res, next) => {
             return res.status(400).send({message: "Chatroom Already Exists"});
         }
         const newChatroom = await Chatroom.create({chatroomName, userId});
+            await newChatroom.save();
+
+        const userInChatroom = await UserInChatroom.create({chatroomId: newChatroom._id, userId: userId, status: "approved"});
+            await userInChatroom.save();
         res.status(200).json({message: `Successfully Created Chatroom ${chatroomName}`});
     }
     catch (err) {
