@@ -6,7 +6,7 @@ const chatroomSchema = new mongoose.Schema( {
         type:String,
         require:true
     },
-    creatorUserId: {
+    userId: {
         type:Number,
         require:true
     },

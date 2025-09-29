@@ -7,7 +7,7 @@ export const approveUserInChatroom = async (req, res, next) => {
         const { chatroomId, userId } = req.body;
         const userDetails = await User.findOne({userId: userId});
         const chatroomDetails = await Chatroom.findOne({chatroomId: chatroomId});
-        if (!userDetails._id.equals(chatroomDetails.creatorUserId)) {
+        if (!userDetails._id.equals(chatroomDetails.userId)) {
             return res.status(400).send({message: "User Does not have permission to Approve Users in Chatroom"});
         }
         const membership = await UserInChatroom.findOne({ chatroomId, userId });
@@ -40,7 +40,7 @@ export const removeUserFromChatroom = async (req, res, next) => {
         const { chatroomId, userId } = req.body;
         const userDetails = await User.findOne({userId: userId});
         const chatroomDetails = await Chatroom.findOne({chatroomId: chatroomId});
-        if (!userDetails._id.equals(chatroomDetails.creatorUserId)) {
+        if (!userDetails._id.equals(chatroomDetails.userId)) {
             return res.status(400).send({message: "User Does not have permission to Remove Users from Chatroom"});
         }
         const deleted = await UserInChatroom.findOneAndDelete({ chatroomId, userId });
