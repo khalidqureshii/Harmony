@@ -19,3 +19,7 @@ connectDB().then( () => {
         console.log(`Server is running at Port ${PORT}`);
     })
 });
+
+app.get("/", (req, res) => {
+    res.send("API is running...");
+});
