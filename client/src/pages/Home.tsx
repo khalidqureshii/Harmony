@@ -1,7 +1,6 @@
 import { useState} from "react";
 import Loader from "../components/Loader";
 import { useSelector } from "react-redux";
-import { UserType } from "@/store/Types";
 
 function Home() {
     const user= useSelector((state:any)=>state.auth.user); 

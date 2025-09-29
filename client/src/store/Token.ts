@@ -1,2 +1,2 @@
-const TOKENNAME:string = "default-token";
+const TOKENNAME:string = "chime-token";
 export default TOKENNAME;
