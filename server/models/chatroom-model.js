@@ -7,7 +7,7 @@ const chatroomSchema = new mongoose.Schema( {
         require:true
     },
     userId: {
-        type:Number,
+        type:String,
         require:true
     },
     createdAt: {
