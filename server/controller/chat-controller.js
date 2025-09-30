@@ -29,13 +29,13 @@ export const addChat = async (req, res, next) => {
 
 export const deleteChat = async (req, res, next) => {
     try{
-        const {messageId, userId, chatroomId} = req.body;
+        const {chatId, userId, chatroomId} = req.body;
 
         const userInChatroomDetails = await UserInChatroom.findOne({chatroomId: chatroomId, userId: userId, status: "approved"});
         if (!userInChatroomDetails) {
             return res.status(400).send({message: "User is not approved in this chatroom"});
         }
-        const updatingOne = await Chat.updateOne({_id: messageId, userId:userId}, {isDeleted:true});
+        const updatingOne = await Chat.updateOne({_id: chatId, userId:userId}, {isDeleted:true});
         res.status(200).json({message: `Removal of Chat Successful`});
     }
     catch (err) {
