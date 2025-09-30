@@ -1,6 +1,7 @@
 import express from "express";
 import Chatroom from "../models/chatroom-model.js";
 import User from "../models/user-model.js";
+import UserInChatroom from "../models/user-in-chatroom-model.js";
 
 export const addChatroom = async (req, res, next) => {
     try{
