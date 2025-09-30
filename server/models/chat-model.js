@@ -3,14 +3,10 @@ import mongoose from "mongoose";
 // Define the Chat schema
 const chatSchema = new mongoose.Schema({
     chatroomId: {
-        type: Number,
+        type: String,
         required: true
     },
     userId: {
-        type: Number,
-        required: true
-    },
-    username: {
         type: String,
         required: true
     },

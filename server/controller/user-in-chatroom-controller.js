@@ -1,12 +1,13 @@
-import UserInChatroom from "../models/user-in-chatroom-model.js";
 import Chatroom from "../models/chatroom-model.js";
 import User from "../models/user-model.js";
+import UserInChatroom from "../models/user-in-chatroom-model.js";
+import Chat from "../models/chat-model.js";
 
 export const approveUserInChatroom = async (req, res, next) => {
     try {
         const { chatroomId, userId } = req.body;
-        const userDetails = await User.findOne({userId: userId});
-        const chatroomDetails = await Chatroom.findOne({chatroomId: chatroomId});
+        const userDetails = await User.findOne({_id: userId});
+        const chatroomDetails = await Chatroom.findOne({_id: chatroomId});
         if (!userDetails._id.equals(chatroomDetails.userId)) {
             return res.status(400).send({message: "User Does not have permission to Approve Users in Chatroom"});
         }
@@ -38,8 +39,8 @@ export const approveUserInChatroom = async (req, res, next) => {
 export const removeUserFromChatroom = async (req, res, next) => {
     try {
         const { chatroomId, userId } = req.body;
-        const userDetails = await User.findOne({userId: userId});
-        const chatroomDetails = await Chatroom.findOne({chatroomId: chatroomId});
+        const userDetails = await User.findOne({_id: userId});
+        const chatroomDetails = await Chatroom.findOne({_id: chatroomId});
         if (!userDetails._id.equals(chatroomDetails.userId)) {
             return res.status(400).send({message: "User Does not have permission to Remove Users from Chatroom"});
         }

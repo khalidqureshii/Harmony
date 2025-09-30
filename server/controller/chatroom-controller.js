@@ -2,6 +2,8 @@ import express from "express";
 import Chatroom from "../models/chatroom-model.js";
 import User from "../models/user-model.js";
 import UserInChatroom from "../models/user-in-chatroom-model.js";
+import Chat from "../models/chat-model.js";
+
 
 export const addChatroom = async (req, res, next) => {
     try{
@@ -13,7 +15,7 @@ export const addChatroom = async (req, res, next) => {
         const newChatroom = await Chatroom.create({chatroomName, userId});
             await newChatroom.save();
 
-        const userInChatroom = await UserInChatroom.create({chatroomId: newChatroom._id, userId: userId, status: "approved"});
+        const userInChatroom = await UserInChatroom.create({chatroomId: newChatroom._id, userId: userId, status: "approved", joinedAt: new Date()});
             await userInChatroom.save();
         res.status(200).json({message: `Successfully Created Chatroom ${chatroomName}`});
     }
@@ -33,12 +35,12 @@ export const addChatroom = async (req, res, next) => {
 export const removeChatroom = async (req, res, next) => {
     try{
         const {chatroomId, userId} = req.body;
-        const userDetails = await User.findOne({userId: userId});
-        const chatroomDetails = await Chatroom.findOne({chatroomId: chatroomId});
-        if (!userDetails.isAdmin || !userDetails._id.equals(chatroomDetails.userId)) {
+        const userDetails = await User.findOne({_id: userId});
+        const chatroomDetails = await Chatroom.findOne({_id: chatroomId});
+        if (!userDetails.isAdmin && !userDetails._id.equals(chatroomDetails.userId)) {
             return res.status(400).send({message: "User Does not have permission to Remove Chatroom"});
         }
-        const deletion = await Chatroom.deleteOne({chatroomId: chatroomId});
+        const deletion = await Chatroom.updateOne({_id: chatroomId}, {isDeleted: true});
         res.status(200).json({message: `Successfully Removed Chatroom`});
     }
     catch (err) {
@@ -56,7 +58,7 @@ export const removeChatroom = async (req, res, next) => {
 
 export const fetchChatrooms = async (req, res, next) => {
     try{
-        const chatrooms = await Chatroom.find();
+        const chatrooms = await Chatroom.find({isDeleted: false});
         res.status(200).json({message: `Successfully Fetched Chatrooms`, chatrooms:chatrooms});
     }
     catch (err) {
@@ -76,7 +78,7 @@ export const fetchChatrooms = async (req, res, next) => {
 export const getChatroom = async (req, res, next) => {
     try{
         const {chatroomId} = req.body
-        const chatroomInfo = await Chatroom.find({chatroomId: chatroomId});
+        const chatroomInfo = await Chatroom.find({_id: chatroomId});
         res.status(200).json({message: `Successfully Fetched Chatroom`, chatroomInfo:chatroomInfo});
     }
     catch (err) {
@@ -95,7 +97,7 @@ export const getChatroom = async (req, res, next) => {
 export const editChatroom = async (req, res, next) => {
     try{
         const {chatroomId, chatroomName} = req.body
-        const chatroomInfo = await Chatroom.updateOne({chatroomId: chatroomId}, {chatroomName: chatroomName});
+        const chatroomInfo = await Chatroom.updateOne({_id: chatroomId}, {chatroomName: chatroomName});
         res.status(200).json({message: `Successfully Edited Chatroom`, chatroomInfo:chatroomInfo});
     }
     catch (err) {
