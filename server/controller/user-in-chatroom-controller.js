@@ -11,7 +11,7 @@ export const approveUserInChatroom = async (req, res, next) => {
         if (!adminDetails._id.equals(chatroomDetails.userId)) {
             return res.status(400).send({message: "User Does not have permission to Approve Users in Chatroom"});
         }
-        const membership = await UserInChatroom.findOne({ chatroomId, userId, status: "requested" });
+        const membership = await UserInChatroom.findOne({ chatroomId, adminId, userId, status: "requested" });
         
         if (!membership) {
             return res.status(404).json({ message: "No join request found for this user in chatroom" });
@@ -38,13 +38,14 @@ export const approveUserInChatroom = async (req, res, next) => {
 
 export const removeUserFromChatroom = async (req, res, next) => {
     try {
-        const { chatroomId, userId } = req.body;
+        const { chatroomId, userId, adminId } = req.body;
         const userDetails = await User.findOne({_id: userId});
+        const adminDetails = await User.findOne({_id: adminId});
         const chatroomDetails = await Chatroom.findOne({_id: chatroomId});
-        if (!userDetails._id.equals(chatroomDetails.userId)) {
+        if (!adminDetails._id.equals(chatroomDetails.userId)) {
             return res.status(400).send({message: "User Does not have permission to Remove Users from Chatroom"});
         }
-        const deleted = await UserInChatroom.findOneAndDelete({ chatroomId, userId });
+        const deleted = await UserInChatroom.updateOne({ chatroomId, userId }, {isRemoved: true});
 
         if (!deleted) {
             return res.status(404).json({ message: "User not found in chatroom" });
@@ -68,10 +69,13 @@ export const requestForChatroom = async (req, res, next) => {
         if (existing) {
             return res.status(400).json({ message: "User already requested to join chatroom" });
         }
+        const chatroomDetails = await Chatroom.findOne({_id: chatroomId});
+        const adminId = chatroomDetails.adminId;
 
         const newRequest = new UserInChatroom({
             chatroomId,
             userId,
+            adminId,
             status: "requested"
         });
 

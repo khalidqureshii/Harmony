@@ -5,6 +5,10 @@ const userInChatroomSchema = new mongoose.Schema( {
         type:String,
         require:true
     },
+    adminId: {
+        type: String,
+        require:true
+    },
     userId: {
         type:String,
         require:true
@@ -20,6 +24,10 @@ const userInChatroomSchema = new mongoose.Schema( {
     joinedAt: {
         type: Date,
         require: false
+    },
+    isRemoved: {
+        type: Boolean,
+        default: false
     }
 });
 
