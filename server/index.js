@@ -41,7 +41,7 @@ app.use("/api/uic", uicRouter);
 app.use(errorMiddleware);
 
 connectDB().then( () => {
-    app.listen(PORT, ()=> {
+    server.listen(PORT, ()=> {
         console.log(`Server is running at Port ${PORT}`);
     })
 });
