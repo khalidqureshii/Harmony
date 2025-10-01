@@ -45,7 +45,7 @@ const ChatroomCard = (props: CardType) => {
             </div>
             {isHovered && (
                 <div className="mt-4 bg-white bg-opacity-20 p-2 rounded-lg backdrop-blur-sm">
-                    <p className="text-white font-semibold">Click to join the chat!</p>
+                    <p className="text-white font-semibold">Enter Chat</p>
                 </div>
             )}
         </div>

@@ -18,6 +18,7 @@ import { CardType } from "../store/Types";
 import { createChatroom, fetchChatroomsForUser } from "@/api/Home";
 import { useSelector } from "react-redux";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import LockedChatroomCard from "@/components/LockedChatroomCard";
 
 
 function Home() {
@@ -44,6 +45,16 @@ function Home() {
 
     function createChatroomCards(entry: CardType) {
         return <ChatroomCard
+            chatroomName={entry.chatroomName}
+            createdAt={entry.createdAt}
+            creatorUsername={entry.creatorUsername}
+            key={entry.chatroomId}
+            chatroomId={entry.chatroomId}
+        />
+    }
+
+    function createLockedChatroomCards(entry: CardType) {
+        return <LockedChatroomCard
             chatroomName={entry.chatroomName}
             createdAt={entry.createdAt}
             creatorUsername={entry.creatorUsername}
@@ -96,7 +107,7 @@ function Home() {
                     {/* Tabs for Chatrooms */}
                     <div className="flex flex-col items-center w-full mt-10">
                         <Tabs defaultValue="joined" className="w-full max-w-5xl bg-none">
-                            <TabsList className="flex justify-center mb-6 bg-transparent p-0">
+                            <TabsList className="flex justify-center mb-9 bg-transparent p-0">
                                 <TabsTrigger
                                     value="joined"
                                     className="w-72 rounded-lg px-4 py-2 text-lg font-bold 
@@ -114,7 +125,7 @@ function Home() {
                                             data-[state=inactive]:bg-gray-200 data-[state=inactive]:text-gray-700
                                             transition-colors"
                                 >
-                                    Other Chatrooms
+                                    Join More Chatrooms
                                 </TabsTrigger>
                             </TabsList>
 
@@ -135,7 +146,7 @@ function Home() {
                                     <p className="text-gray-600 mb-5 text-2xl">No other chatrooms available. Create one!</p>
                                 ) : (
                                     <div className="flex flex-row justify-center items-center flex-wrap gap-4">
-                                        {otherChatrooms.map(createChatroomCards)}
+                                        {otherChatrooms.map(createLockedChatroomCards)}
                                     </div>
                                 )}
                             </TabsContent>
