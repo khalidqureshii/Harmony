@@ -1,14 +1,14 @@
 import Chatroom from "../models/chatroom-model.js";
 import User from "../models/user-model.js";
 import UserInChatroom from "../models/user-in-chatroom-model.js";
-import Chat from "../models/chat-model.js";
 
 export const approveUserInChatroom = async (req, res, next) => {
     try {
-        const { chatroomId, userId } = req.body;
-        const userDetails = await User.findOne({_id: userId});
+        const { chatroomId, userId, adminId } = req.body;
+        const adminDetails = await User.findOne({_id: adminId});
+
         const chatroomDetails = await Chatroom.findOne({_id: chatroomId});
-        if (!userDetails._id.equals(chatroomDetails.userId)) {
+        if (!adminDetails._id.equals(chatroomDetails.userId)) {
             return res.status(400).send({message: "User Does not have permission to Approve Users in Chatroom"});
         }
         const membership = await UserInChatroom.findOne({ chatroomId, userId, status: "requested" });

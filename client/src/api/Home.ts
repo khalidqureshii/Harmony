@@ -78,3 +78,23 @@ export async function requestToJoinChatroom(data: {chatroomId:string, userId: st
     }
     return resp;
 }
+
+
+export async function approveUser(data: {chatroomId:string, requestId:string, userId: string}) {
+    const response = await fetch(LINK + "api/uic/requestForChatroom", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            chatroomId: data.chatroomId,
+            adminId: data.userId,
+            userId: data.requestId
+        })
+    });
+    const resp = await response.json();
+    if (!response.ok) {
+        throw new Error(resp.message);
+    }
+    return resp;
+}
