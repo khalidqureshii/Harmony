@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Lock, User, Calendar } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 type LockedCardType = {
     chatroomName: string,
@@ -30,7 +29,8 @@ const LockedChatroomCard = (props: LockedCardType) => {
 
     return (
         <div
-            className={`${randomColor()} opacity-70 rounded-xl p-6 group text-center m-3 cursor-default shadow-lg transition-all duration-300 ease-in-out transform ${isHovered ? "scale-105" : ""} hover:shadow-xl`}
+            className={`${randomColor()} opacity-70 rounded-xl p-6 group text-center m-3 cursor-pointer shadow-lg transition-all duration-300 ease-in-out transform ${isHovered ? "scale-105" : ""} hover:shadow-xl`}
+            onClick={() => props.onRequestJoin?.(props.chatroomId)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -54,15 +54,10 @@ const LockedChatroomCard = (props: LockedCardType) => {
                 <h2>{formattedDate}</h2>
             </div>
 
-            {/* Hover State */}
+            {/* Hover Text */}
             {isHovered && (
-                <div className="mt-4 bg-opacity-20 p-3 rounded-lg backdrop-blur-sm flex justify-center">
-                    <Button
-                        onClick={() => props.onRequestJoin?.(props.chatroomId)}
-                        className="bg-black hover:bg-gray-700 text-white font-semibold"
-                    >
-                        Click to Request 
-                    </Button>
+                <div className="mt-4 bg-white bg-opacity-20 p-2 rounded-lg backdrop-blur-sm">
+                    <p className="text-white font-semibold">Click to request join</p>
                 </div>
             )}
         </div>
