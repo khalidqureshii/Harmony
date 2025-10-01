@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Lock, User, Calendar } from "lucide-react";
+import { Lock, Calendar } from "lucide-react";
 
 type LockedCardType = {
     chatroomName: string,
     createdAt: Date,
-    creatorUsername: string,
     chatroomId: string,
-    onRequestJoin?: (chatroomId: string) => void; // callback for request join
+    onRequestJoin: (chatroomId: string) => void; 
 }
 
 const LockedChatroomCard = (props: LockedCardType) => {
@@ -30,7 +29,7 @@ const LockedChatroomCard = (props: LockedCardType) => {
     return (
         <div
             className={`${randomColor()} opacity-70 rounded-xl p-6 group text-center m-3 cursor-pointer shadow-lg transition-all duration-300 ease-in-out transform ${isHovered ? "scale-105" : ""} hover:shadow-xl`}
-            onClick={() => props.onRequestJoin?.(props.chatroomId)}
+            onClick={() => props.onRequestJoin(props.chatroomId)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -43,10 +42,10 @@ const LockedChatroomCard = (props: LockedCardType) => {
             </div>
 
             {/* Creator Info */}
-            <div className="flex items-center justify-center mb-2 text-white">
+            {/* <div className="flex items-center justify-center mb-2 text-white">
                 <User className="w-5 h-5 mr-2" />
                 <h2 className="text-xl">{props.creatorUsername}</h2>
-            </div>
+            </div> */}
 
             {/* Created Date */}
             <div className="flex items-center justify-center text-white">

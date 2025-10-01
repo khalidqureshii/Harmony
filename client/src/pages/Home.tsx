@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import AddHeader from "@/components/headers/AddHeader";
 import { MessageSquarePlus } from "lucide-react";
 import { CardType } from "../store/Types";
-import { createChatroom, fetchChatroomsForUser } from "@/api/Home";
+import { createChatroom, fetchChatroomsForUser, requestToJoinChatroom } from "@/api/Home";
 import { useSelector } from "react-redux";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LockedChatroomCard from "@/components/LockedChatroomCard";
@@ -47,19 +47,31 @@ function Home() {
         return <ChatroomCard
             chatroomName={entry.chatroomName}
             createdAt={entry.createdAt}
-            creatorUsername={entry.creatorUsername}
-            key={entry.chatroomId}
-            chatroomId={entry.chatroomId}
+            key={entry._id}
+            _id={entry._id}
         />
+    }
+
+    async function sendRequestToJoinChatroom(chatroomId: string) {
+        const data = { chatroomId: chatroomId, userId: user._id };
+        try {
+            setLoading(true);
+            const resp = await requestToJoinChatroom(data);
+            toast.success(resp.message);
+        } catch (error) {
+            if (error instanceof Error) toast.error(error.message);
+        } finally {
+            setLoading(false);
+        }
     }
 
     function createLockedChatroomCards(entry: CardType) {
         return <LockedChatroomCard
             chatroomName={entry.chatroomName}
             createdAt={entry.createdAt}
-            creatorUsername={entry.creatorUsername}
-            key={entry.chatroomId}
-            chatroomId={entry.chatroomId}
+            key={entry._id}
+            chatroomId={entry._id}
+            onRequestJoin={sendRequestToJoinChatroom} 
         />
     }
 

@@ -61,16 +61,20 @@ export async function createChatroom(data: {chatroomName: string, userId: string
     }
 } 
 
-export const handleUpload = async (file:File) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    const response =  await fetch('http://localhost:5000/api/file/upload', {
-        method: 'POST',
-        body: formData,
+export async function requestToJoinChatroom(data: {chatroomId:string, userId: string}) {
+    const response = await fetch(LINK + "api/uic/requestForChatroom", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            chatroomId: data.chatroomId,
+            userId: data.userId
+        })
     });
     const resp = await response.json();
-    if (response.ok) {
-        return resp;
+    if (!response.ok) {
+        throw new Error(resp.message);
     }
-    else throw new Error(resp.message);
-};
+    return resp;
+}

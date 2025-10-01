@@ -13,11 +13,9 @@ export type MessageType = {
 };
 
 export type CardType = {
-    chatroomUserId:string,
     chatroomName:string,
     createdAt:Date,
-    creatorUsername:string,
-    chatroomId:string
+    _id:string
 }
 
 export type RespType = {

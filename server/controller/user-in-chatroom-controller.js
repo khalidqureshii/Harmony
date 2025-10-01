@@ -11,7 +11,7 @@ export const approveUserInChatroom = async (req, res, next) => {
         if (!userDetails._id.equals(chatroomDetails.userId)) {
             return res.status(400).send({message: "User Does not have permission to Approve Users in Chatroom"});
         }
-        const membership = await UserInChatroom.findOne({ chatroomId, userId });
+        const membership = await UserInChatroom.findOne({ chatroomId, userId, status: "requested" });
         
         if (!membership) {
             return res.status(404).json({ message: "No join request found for this user in chatroom" });

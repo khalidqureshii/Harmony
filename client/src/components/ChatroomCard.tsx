@@ -1,13 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { MessageSquare, User, Calendar } from 'lucide-react';
+import { MessageSquare, Calendar } from 'lucide-react';
 import { useState } from "react";
-
-type CardType = {
-    chatroomName: string,
-    createdAt: Date,
-    creatorUsername: string,
-    chatroomId: string,
-}
+import { CardType } from "@/store/Types";
 
 const ChatroomCard = (props: CardType) => {
     const navigate = useNavigate();
@@ -25,7 +19,7 @@ const ChatroomCard = (props: CardType) => {
     return (
         <div
             className={`${randomColor()} rounded-xl p-6 group text-center m-3 cursor-pointer shadow-lg transition-all duration-300 ease-in-out transform ${isHovered ? 'scale-105' : ''} hover:shadow-xl`}
-            onClick={() => navigate(`/chatroom/${props.chatroomId}`)}
+            onClick={() => navigate(`/chatroom/${props._id}`)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -35,10 +29,10 @@ const ChatroomCard = (props: CardType) => {
                     {props.chatroomName}
                 </h1>
             </div>
-            <div className="flex items-center justify-center mb-2 text-white">
+            {/* <div className="flex items-center justify-center mb-2 text-white">
                 <User className="w-5 h-5 mr-2" />
                 <h2 className="text-xl">{props.creatorUsername}</h2>
-            </div>
+            </div> */}
             <div className="flex items-center justify-center text-white">
                 <Calendar className="w-5 h-5 mr-2" />
                 <h2>{formattedDate}</h2>
