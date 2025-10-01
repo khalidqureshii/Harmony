@@ -6,10 +6,11 @@ export type ChatroomType = {
 };
 
 export type MessageType = {
-    userId: string;
-    username: string;
-    message: string;
-    timestamp: Date;
+  _id: string;          
+  userId: string;       
+  username: string;     
+  message: string;      
+  timestamp: Date;     
 };
 
 export type CardType = {

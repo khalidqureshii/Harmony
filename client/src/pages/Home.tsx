@@ -90,7 +90,7 @@ function Home() {
     }
 
     async function createChatroomLocal() {
-        const data = { chatroomName: chatroomName, userId: user.userId, creatorUsername: user.username };
+        const data = { chatroomName: chatroomName, userId: user._id};
         try {
             setLoading(true);
             const resp = await createChatroom(data);
@@ -139,6 +139,16 @@ function Home() {
                                 >
                                     Join More Chatrooms
                                 </TabsTrigger>
+
+                                <TabsTrigger
+                                    value="add"
+                                    className="w-72 rounded-lg px-4 py-2 text-lg font-bold flex items-center justify-center gap-2
+                                                data-[state=active]:bg-white data-[state=active]:text-black
+                                                data-[state=inactive]:bg-gray-200 data-[state=inactive]:text-gray-700
+                                                transition-colors"
+                                    >
+                                    Add Chatroom
+                                </TabsTrigger>
                             </TabsList>
 
                             {/* Joined Chatrooms Tab */}
@@ -161,6 +171,31 @@ function Home() {
                                         {otherChatrooms.map(createLockedChatroomCards)}
                                     </div>
                                 )}
+                            </TabsContent>
+
+                            <TabsContent value="add" className="flex flex-col items-center">
+                                <div className="w-full max-w-md p-6 bg-white rounded-xl shadow-md">
+                                <h2 className="text-2xl font-bold mb-4">Create a New Chatroom</h2>
+                                <Input
+                                    id="newName"
+                                    value={chatroomName}
+                                    onChange={(e) => setChatroomName(e.target.value)}
+                                    className="w-full mb-4"
+                                    placeholder="Enter Room Name"
+                                />
+                                <Button
+                                    onClick={async () => {
+                                    await createChatroomLocal();
+                                    setChatroomName(""); // reset input
+                                    // optionally switch back to joined tab after creation
+                                    const tabs = document.querySelector<HTMLElement>('[data-value="joined"]');
+                                    tabs?.click();
+                                    }}
+                                    className="bg-blue-600 hover:bg-blue-400 text-white font-semibold w-full"
+                                >
+                                    <MessageSquarePlus className="w-5 h-5 mr-2" /> Submit
+                                </Button>
+                                </div>
                             </TabsContent>
                         </Tabs>
                     </div>
