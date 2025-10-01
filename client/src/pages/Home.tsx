@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import AddHeader from "@/components/headers/AddHeader";
 import { MessageSquarePlus } from "lucide-react";
 import { CardType } from "../store/Types";
-import { createChatroom, fetchChatrooms, handleUpload } from "@/api/Home";
+import { createChatroom, fetchChatroomsForUser, handleUpload } from "@/api/Home";
 import { useSelector } from "react-redux";
 
 
@@ -36,7 +36,8 @@ function Home() {
     
     const user = useSelector((state:any) => state.auth.user)
     const [isLoading, setLoading] = useState(true);
-    const [chatrooms, setChatrooms] = useState([]);
+    const [joinedChatrooms, setJoinedChatrooms] = useState([]);
+    const [otherChatrooms, setOtherChatrooms] = useState([]);
     const [chatroomName, setChatroomName] = useState<string>("");
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const [isUploadDialogOpen, setIsUploadDialogOpen] = useState<boolean>(false);
@@ -52,10 +53,12 @@ function Home() {
     async function fetchChatroomsLocal() {
         try {
             setLoading(true);
-            const resp = await fetchChatrooms();
-            setChatrooms(resp.chatrooms);
+            const resp = await fetchChatroomsForUser(user.userId);
+            setJoinedChatrooms(resp.joinedChatrooms);
+            setOtherChatrooms(resp.notJoined);
         } catch (error) {
-            setChatrooms([]); 
+            setJoinedChatrooms([]);
+            setOtherChatrooms([]);
         }   finally {
             setLoading(false);
         }
@@ -107,9 +110,17 @@ function Home() {
                 <div className="mx-5">
                     <h1 className="mb-5 text-4xl md:text-5xl text-center font-extrabold text-gray-800 mt-16">Welcome {user.username}!</h1>
                     <div className="flex flex-col justify-center items-center w-full">
-                        <h1 className="mb-5 text-4xl md:text-5xl text-center font-extrabold text-gray-800 mt-10">Chatrooms</h1>
-                        <div className="flex flex-row justify-center items-center flex-wrap">
-                            {chatrooms.map(createChatroomCards)}
+                        <div className="flex flex-col justify-center items-center w-full">
+                            <h1 className="mb-5 text-4xl md:text-5xl text-center font-extrabold text-gray-800 mt-10">Joined Chatrooms</h1>
+                            <div className="flex flex-row justify-center items-center flex-wrap">
+                                {joinedChatrooms.map(createChatroomCards)}
+                            </div>
+                        </div>
+                        <div className="flex flex-col justify-center items-center w-full">
+                            <h1 className="mb-5 text-4xl md:text-5xl text-center font-extrabold text-gray-800 mt-10">Other Chatrooms</h1>
+                            <div className="flex flex-row justify-center items-center flex-wrap">
+                                {otherChatrooms.map(createChatroomCards)}
+                            </div>
                         </div>
                     </div>
                 </div>

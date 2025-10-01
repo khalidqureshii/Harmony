@@ -18,6 +18,29 @@ export async function fetchChatrooms() {
     return resp;
 }
 
+export const fetchChatroomsForUser = async (userId: String) => {
+    const response = await fetch(LINK + `api/chatroom/fetchForUser`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'Application/JSON',
+        },
+        body: JSON.stringify({
+            userId: userId,
+        }),
+    });
+    const resp = await response.json();
+    return resp;
+}
+
+export const fetchAllUsers = async () => {
+    const response = await fetch(LINK + `api/auth/fetchAllUsers`, {
+        method: 'GET',
+    });
+    const resp = await response.json();
+    return resp;
+}
+
+
 export async function createChatroom(data: {chatroomName: String, userId: String}) {
     const response = await fetch(LINK + "api/chatroom/add", {
         method: "POST",

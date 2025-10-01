@@ -52,24 +52,3 @@ export const fetchChatroom = async (chatroomId: String) => {
     return resp;
 }
 
-export const fetchChatroomForUser = async (userId: String) => {
-    const response = await fetch(LINK + `api/chatroom/fetchForUser`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'Application/JSON',
-        },
-        body: JSON.stringify({
-            userId: userId,
-        }),
-    });
-    const resp = await response.json();
-    return resp;
-}
-
-export const fetchAllUsers = async () => {
-    const response = await fetch(LINK + `api/auth/fetchAllUsers`, {
-        method: 'GET',
-    });
-    const resp = await response.json();
-    return resp;
-}
