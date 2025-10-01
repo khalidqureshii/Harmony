@@ -15,7 +15,7 @@ export const addChatroom = async (req, res, next) => {
         const newChatroom = await Chatroom.create({chatroomName, userId});
             await newChatroom.save();
 
-        const userInChatroom = await UserInChatroom.create({chatroomId: newChatroom._id, userId: userId, status: "approved", joinedAt: new Date()});
+        const userInChatroom = await UserInChatroom.create({chatroomId: newChatroom._id, userId: userId, adminId: userId, status: "approved", joinedAt: new Date()});
             await userInChatroom.save();
         res.status(200).json({message: `Successfully Created Chatroom ${chatroomName}`});
     }
