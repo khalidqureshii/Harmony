@@ -6,7 +6,7 @@ type CardType = {
     chatroomName: string,
     createdAt: Date,
     creatorUsername: string,
-    chatroomId: number,
+    chatroomId: string,
 }
 
 const ChatroomCard = (props: CardType) => {

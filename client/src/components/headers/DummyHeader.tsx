@@ -5,7 +5,7 @@ function DummyHeader () {
             <button>
                 <div className="flex my-0.5">
                     <img src="logo.png" style={{ width: "2.5rem", height: "auto", objectFit: "contain" }} className="mr-3" />
-                    <h1 className="text-[2.9rem] font-bold font-logo hidden md:block">Harmony</h1>
+                    <h1 className="text-[2.9rem] font-bold font-logo hidden md:block">Chime</h1>
                 </div>
             </button>
         </div>

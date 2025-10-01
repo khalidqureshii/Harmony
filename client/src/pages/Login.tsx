@@ -14,7 +14,7 @@ function Login() {
     const navigate = useNavigate();
     const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
     const userLoading = useSelector((state: any) => state.auth.userLoading);
-    
+
     useEffect(() => {
         if (isLoggedIn) {
             navigate("/home"); 
@@ -39,6 +39,7 @@ function Login() {
         setLoading(true);
         try {
             const response = await storeData(user);
+            console.log("Login Response: ", response);
             toast.success("Successfully Logged in");
             dispatch(storeToken(response.token));
             await dispatch(authenticateUser(response.token));

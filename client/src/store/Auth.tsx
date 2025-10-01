@@ -1,7 +1,7 @@
 import React from "react";
 import LINK from "./Link";
 import Loader from "../components/Loader";
-import DummyHeader from "../components/DummyHeader";
+import DummyHeader from "../components/headers/DummyHeader";
 import TOKENNAME from "./Token";
 
 interface AuthContextType {
@@ -17,17 +17,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [isLoading, setLoading] = React.useState(false);
     const[token, setToken] = React.useState(localStorage.getItem(TOKENNAME));
     const [user, setUser] = React.useState("");
+    const [isLoggedIn, setIsLoggedIn] = React.useState(!!token);
 
     const storeTokenInLS = (serverToken: string) => {
         setToken(serverToken);
         return localStorage.setItem(TOKENNAME, serverToken);
     };
 
-    let isLoggedIn = !!token;
-
     const LogoutUser = () => {
         console.log("Logged Out");
         setToken("");
+        setIsLoggedIn(false);
+        setUser("");
         return localStorage.removeItem(TOKENNAME);
     };
 
@@ -45,6 +46,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const data = await response.json();
                 const userData = data.msg;
                 setUser(userData);
+                setIsLoggedIn(true);
+                setLoading(false);
+                console.log("User Authenticated");
             }
         }
         catch (err) {
