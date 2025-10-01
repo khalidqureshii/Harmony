@@ -8,7 +8,7 @@ import {
     DialogTitle,
   } from "@/components/ui/dialog"
 import DemoVideo from "../DemoVideo";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 type headerType = {
     addTrigger: (x:boolean)=>void;
@@ -16,8 +16,9 @@ type headerType = {
 }
 
 function AddHeader (props:headerType) {
+    console.log(props)
     const navigate = useNavigate();
-    const user = useSelector((state:any) => state.auth.user)
+    // const user = useSelector((state:any) => state.auth.user)
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
     return (
@@ -30,7 +31,7 @@ function AddHeader (props:headerType) {
                     </div>
                 </button>
                 <div className="flex justify-center">
-                    <button onClick={() => {setIsDialogOpen(true)}} className="relative group flex flex-col items-center ml-5">
+                    {/* <button onClick={() => {setIsDialogOpen(true)}} className="relative group flex flex-col items-center ml-5">
                         <img src="youtube.png" style={{ width: "3rem", height: "auto", objectFit: "contain" }}/>
                         <div className="absolute bottom-[-2.2rem] opacity-0 group-hover:opacity-100 transform scale-90 group-hover:scale-100 transition-all duration-300 ease-in-out bg-gray-800 text-white rounded-lg px-3 py-1">
                             Demo
@@ -55,7 +56,7 @@ function AddHeader (props:headerType) {
                                 Manage
                             </div>
                         </button>
-                    </>)}
+                    </>)} */}
                     <button onClick={() => { navigate("/logout") }} className="relative group flex flex-col items-center ml-5" >
                         <img src="logout.png" style={{ width: "3rem", height: "auto", objectFit: "contain" }} />
                         <div className="absolute bottom-[-2.2rem] opacity-0 group-hover:opacity-100 transform scale-90 group-hover:scale-100 transition-all duration-300 ease-in-out bg-gray-800 text-white rounded-lg px-3 py-1">

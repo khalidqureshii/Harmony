@@ -3,7 +3,6 @@ export type ChatroomType = {
     chatroomName: string;
     userId: string;
     createdAt: Date;
-    chatroomId: number;
 };
 
 export type MessageType = {
@@ -14,11 +13,11 @@ export type MessageType = {
 };
 
 export type CardType = {
-    chatroomUserId:number,
+    chatroomUserId:string,
     chatroomName:string,
     createdAt:Date,
-    creatorUsername:string
-    chatroomId:number
+    creatorUsername:string,
+    chatroomId:string
 }
 
 export type RespType = {
@@ -27,9 +26,8 @@ export type RespType = {
 
 export type UserType = {
     email:string,
-    isAdmin:boolean,
+    isAdmin:Boolean,
     joinedOn:Date,
-    userId:number,
     username:string,
     _id:string
 }

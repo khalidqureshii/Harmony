@@ -1,6 +1,6 @@
 import LINK from "@/store/Link";
 
-export async function deleteMessage (data: {chatId:String, userId: String, chatroomId: String}) {
+export async function deleteMessage (data: {chatId:string, userId: string, chatroomId: string}) {
     const response = await fetch(LINK + "api/chat/delete", {
         method:"PATCH",
         headers:{
@@ -12,7 +12,7 @@ export async function deleteMessage (data: {chatId:String, userId: String, chatr
     return resp;
 }
 
-export async function editMessage (data: {chatId: String, userId: String, newMessage: String}) {
+export async function editMessage (data: {chatId: string, userId: string, newMessage: string}) {
     const response = await fetch(LINK + "api/chat/update", {
         method:"PATCH",
         headers:{
@@ -24,7 +24,7 @@ export async function editMessage (data: {chatId: String, userId: String, newMes
     return resp;
 }
 
-export const fetchMessages = async (chatroomId: String) => {
+export const fetchMessages = async (chatroomId: string) => {
     const response = await fetch(LINK + `api/chat/fetch`, {
         method: 'POST',
         headers: {
@@ -38,7 +38,7 @@ export const fetchMessages = async (chatroomId: String) => {
     return resp;
 };
 
-export const fetchChatroom = async (chatroomId: String) => {
+export const fetchChatroom = async (chatroomId: string) => {
     const response = await fetch(LINK + `api/chatroom/getChatroom`, {
         method: 'POST',
         headers: {

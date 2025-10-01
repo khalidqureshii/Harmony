@@ -1,6 +1,6 @@
 import LINK from "@/store/Link";
 
-export async function deleteChatroom(data: {selectedChatroomId:String, userId: String}) {
+export async function deleteChatroom(data: {selectedChatroomId:string, userId: string}) {
     const {selectedChatroomId, userId} = data;
     const response = await fetch(LINK + "api/chatroom/remove", {
         method: "DELETE",
@@ -31,7 +31,7 @@ export async function deleteChatroom(data: {selectedChatroomId:String, userId: S
     }
 }
 
-export async function editChatroom(data: {selectedChatroomId:String, editedName: string}) {
+export async function editChatroom(data: {selectedChatroomId:string, editedName: string}) {
     const response = await fetch(LINK + "api/chatroom/edit", {
         method: "POST",
         headers: {

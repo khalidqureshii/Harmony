@@ -3,8 +3,8 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Logout from './pages/Logout'
 import Home from './pages/Home'
-import Header from "./components/Header"
-import DummyHeader from "./components/DummyHeader"
+import Header from "./components/headers/Header"
+import DummyHeader from "./components/headers/DummyHeader"
 
 function App() {
   return (

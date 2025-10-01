@@ -14,7 +14,6 @@ const defaultUser = {
   email: "",
   isAdmin: false,
   joinedOn: new Date(),
-  userId: 0,
   username: "",
   _id: "",
 }

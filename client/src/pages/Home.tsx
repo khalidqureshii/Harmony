@@ -33,6 +33,7 @@ function Home() {
     useEffect(()=>{
         fetchChatroomsLocal();
     },[])
+        
     
     const user = useSelector((state:any) => state.auth.user)
     const [isLoading, setLoading] = useState(true);
@@ -53,9 +54,13 @@ function Home() {
     async function fetchChatroomsLocal() {
         try {
             setLoading(true);
+            console.log("User ID: ", user.userId);
             const resp = await fetchChatroomsForUser(user.userId);
             setJoinedChatrooms(resp.joinedChatrooms);
             setOtherChatrooms(resp.notJoined);
+            console.log("Joined Chatrooms: ", resp.joinedChatrooms);
+            console.log("Other Chatrooms: ", resp.notJoined);
+            console.log("User Id: ", user.userId);
         } catch (error) {
             setJoinedChatrooms([]);
             setOtherChatrooms([]);
