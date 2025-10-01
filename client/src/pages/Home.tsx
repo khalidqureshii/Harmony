@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { toast } from "react-toastify";
 import AddHeader from "@/components/headers/AddHeader";
 import { MessageSquarePlus } from "lucide-react";
-import { CardType } from "@/store/Types";
+import { CardType } from "../store/Types";
 import { createChatroom, fetchChatrooms, handleUpload } from "@/api/Home";
 import { useSelector } from "react-redux";
 
@@ -62,7 +62,7 @@ function Home() {
     }
 
     async function createChatroomLocal() {
-        const data = {chatroomName:chatroomName, creatorUserId: user.userId, creatorUsername: user.username};
+        const data = {chatroomName:chatroomName, userId: user.userId, creatorUsername: user.username};
         try {
             setLoading(true);
             const resp = await createChatroom(data);
