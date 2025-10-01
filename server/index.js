@@ -10,6 +10,7 @@ import cors from "cors";
 import chatroomRouter from "./router/chatroom-router.js";
 import chatRouter from "./router/chat-router.js";
 import uicRouter from "./router/user-in-chatroom-router.js"; 
+import Chat from "./models/chat-model.js";
 
 const app = express();
 const PORT = 5000;
