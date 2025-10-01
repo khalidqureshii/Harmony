@@ -87,4 +87,22 @@ const user = async (req, res) => {
     }
 }
 
-export {login, register, home, user};
+const fetchAllUsers = async (req, res, next) => {
+    try {
+        const users = await User.find().select("username");
+        return res.status(200).json({message: "Successfully Fetched Users", users: users});
+    }
+    catch (err) {
+        const status = 404;
+        const message = "Error in Fetching Users";
+        const extraDetails = err.errors[0].message.toString();
+        const errorDetails = {
+            message,
+            status,
+            extraDetails
+        }
+        next(errorDetails);
+    }
+}
+
+export {login, register, home, user, fetchAllUsers};

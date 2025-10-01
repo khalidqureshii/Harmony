@@ -11,5 +11,6 @@ router.route("/login").post(validateLogin(loginSchema),authControllers.login);
 router.route("/register").post(validateSignUp(signUpSchema),authControllers.register);
 router.route("/");
 router.route("/user").get(authMiddleware, authControllers.user);
+router.route("/fetchAllUsers").get(authControllers.fetchAllUsers);
 
 export default router;

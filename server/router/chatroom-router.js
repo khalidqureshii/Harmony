@@ -9,5 +9,6 @@ router.route("/remove").delete(chatroomControllers.removeChatroom);
 router.route("/fetch").get(chatroomControllers.fetchChatrooms);
 router.route("/getChatroom").post(chatroomControllers.getChatroom);
 router.route("/edit").post(chatroomControllers.editChatroom);
+router.route("/fetchForUser").post(chatroomControllers.FetchChatroomsForUser);
 
 export default router;

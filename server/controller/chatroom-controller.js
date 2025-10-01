@@ -74,6 +74,32 @@ export const fetchChatrooms = async (req, res, next) => {
     }
 }
 
+export const FetchChatroomsForUser = async (req, res, next) => {
+    const {userId} = req.body;
+    try{
+        const chatrooms = await Chatroom.find({isDeleted: false});
+        const joinedChatroomIds = await UserInChatroom.find({userId: userId}).distinct("chatroomId");
+        const notJoinedChatrooms = chatrooms.filter(
+            chatroom => !joinedChatroomIds.map(id => id.toString()).includes(chatroom._id.toString())
+        );
+
+        const joinedChatrooms = chatrooms.filter(
+            chatroom => joinedChatroomIds.map(id => id.toString()).includes(chatroom._id.toString())
+        );
+        res.status(200).json({message: `Successfully Fetched Chatrooms For User`, joinedChatrooms: joinedChatrooms, notJoined: notJoinedChatrooms});
+    }
+    catch (err) {
+        const status = 404;
+        const message = "Error in Fetching Chatrooms";
+        const extraDetails = "Not much";
+        const errorDetails = {
+            message,
+            status,
+            extraDetails
+        }
+        next(errorDetails);
+    }
+}
 
 export const getChatroom = async (req, res, next) => {
     try{
