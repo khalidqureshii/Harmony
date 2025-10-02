@@ -61,7 +61,7 @@ const Chatroom = () => {
     const [selectedMessage, setSelectedMessage] = useState<MessageType | null>(null);
     const [isAlertDialogOpen, setIsAlertDialogOpen] = useState<boolean>(false);
     const [editedMessage, setEditedMessage] = useState<string>("");
-
+    const adminPanelRef = useRef<HTMLDivElement | null>(null);
     const [showAdminPanel, setShowAdminPanel] = useState(false);
     const [approvalRequests, setApprovalRequests] = useState<any[]>([]);
 
@@ -80,6 +80,14 @@ const Chatroom = () => {
             setIsLoading(false);
         }
     }
+
+    useEffect(() => {
+        if (showAdminPanel) {
+            setTimeout(() => {
+            adminPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }, 500); // short delay so DOM can render
+        }
+    }, [showAdminPanel]);
 
     async function approveRequests(selectedUserId:string, userId:string, chatroomId:string){
         setIsLoading(true);
@@ -319,7 +327,7 @@ const Chatroom = () => {
     if (isLoading || userLoading) return <Loader />;
     return (
         <>
-            <div className='flex justify-center mt-8 mb-6'>
+            <div className='flex justify-center mt-8'>
                 {isAdmin ? (<div className='flex justify-center'>
                     <div className="flex justify-center items-center">
                         <Button 
@@ -349,7 +357,7 @@ const Chatroom = () => {
                         </Button>
                     </div>)}
             </div>
-            <div className="flex flex-col justify-center items-center w-screen h-80vh mt-10 mb-10">
+            <div className="flex flex-col justify-center items-center w-full h-80vh">
                 <div className="bg-[#c7c7c7] w-11/12 rounded-xl max-w-[775px]">
                     <h1 className="text-5xl text-black font-extrabold text-center mt-8 pb-5 relative 
                     after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-[1.75px] after:bg-gradient-to-r after:from-transparent after:via-[#b1b1b1] after:to-transparent">{chatroomData.chatroomName}</h1>
@@ -426,9 +434,11 @@ const Chatroom = () => {
                         </button>
                     </div>
                 </div>
+            </div>
+            <div className='flex flex-col justify-center items-center w-full mb-10'>
                 {showAdminPanel && (
-                    <div className="bg-white shadow-lg rounded-xl mt-6 p-6 w-11/12 max-w-[775px] mb-10">
-                        <div className="flex justify-between items-center mb-4">
+                    <div className="bg-white shadow-lg rounded-xl mt-6 p-6 w-11/12 max-w-[775px]">
+                        <div className="flex justify-between items-center mb-4" ref={adminPanelRef}>
                             <h2 className="text-xl font-bold text-gray-700">Approval Requests</h2>
                             <X className="cursor-pointer text-gray-600" onClick={() => setShowAdminPanel(false)} />
                         </div>
