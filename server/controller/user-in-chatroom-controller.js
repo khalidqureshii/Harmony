@@ -70,7 +70,7 @@ export const requestForChatroom = async (req, res, next) => {
             return res.status(400).json({ message: "User already requested to join chatroom" });
         }
         const chatroomDetails = await Chatroom.findOne({_id: chatroomId});
-        const adminId = chatroomDetails.adminId;
+        const adminId = chatroomDetails.userId;
 
         const newRequest = new UserInChatroom({
             chatroomId,

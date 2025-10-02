@@ -99,7 +99,7 @@ const Chatroom = () => {
             socket.emit('sendMessage', {
                 chatroomName: chatroomId,
                 message: newMessage,
-                userId: user.userId, 
+                userId: user._id, 
                 username: user.username, 
             });
             setNewMessage('');
@@ -132,7 +132,7 @@ const Chatroom = () => {
     
     async function deleteMessageLocal() {
         const msg = selectedMessage!;
-        if (msg.username != user.username && !user.isAdmin) {
+        if (msg._id != user._id) {
             toast.error("User Not authorized");
             return;
         }

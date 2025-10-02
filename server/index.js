@@ -56,7 +56,7 @@ io.on("connection", (socket) => {
         console.log(`${socket.id} joined chatroom: ${chatroomName}`);
     });
 
-    socket.on("sendMessage", async ({ chatroomName, message, userId}) => {
+    socket.on("sendMessage", async ({ chatroomName, message, userId, username}) => {
         console.log(`Message: "${message}"\nChatroom: ${chatroomName}`);
 
         const newMessage = {
@@ -64,6 +64,7 @@ io.on("connection", (socket) => {
             userId,
             message,
             timestamp: new Date(),
+            username
         };
         await Chat.create(newMessage);
 
