@@ -29,12 +29,7 @@ export const addChat = async (req, res, next) => {
 
 export const deleteChat = async (req, res, next) => {
     try{
-        const {chatId, userId, chatroomId} = req.body;
-
-        const userInChatroomDetails = await UserInChatroom.findOne({chatroomId: chatroomId, userId: userId, status: "approved"});
-        if (!userInChatroomDetails) {
-            return res.status(400).send({message: "User is not approved in this chatroom"});
-        }
+        const {chatId, userId} = req.body;
         const updatingOne = await Chat.updateOne({_id: chatId, userId:userId}, {isDeleted:true});
         res.status(200).json({message: `Removal of Chat Successful`});
     }
@@ -145,7 +140,9 @@ export const fetchChat = async (req, res, next) => {
 export const updateChat = async (req, res, next) => {
     try{
         const {chatId, userId, newMessage} = req.body;
+        console.log("Reached here", chatId, userId, newMessage);
         const updation = await Chat.updateOne({_id: chatId, userId: userId}, {isEdited:true, message: newMessage});
+        console.log(updation);
         res.status(200).json({message: `Removal of Chat Successful`});
     }
     catch (err) {

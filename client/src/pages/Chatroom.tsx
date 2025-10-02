@@ -232,16 +232,17 @@ const Chatroom = () => {
     
     async function deleteMessageLocal() {
         const msg = selectedMessage!;
-        if (msg._id != user._id) {
+        if (msg.userId != user._id && !isAdmin) {
             toast.error("User Not authorized");
             return;
         }
         const data = {
-            _id: msg._id, 
+            chatId: msg._id, 
             userId: msg.userId,
         };
         setIsLoading(true);
         try {
+            console.log(data);
             await deleteMessage(data); 
             toast.success("Successfully Deleted Message");
             fetchMessagesLocal();  
@@ -256,18 +257,22 @@ const Chatroom = () => {
     
     async function editMessageLocal(newMessage: string) {
         const msg:MessageType = selectedMessage!;
+        console.log(msg);
+        console.log(user);
         if (msg.username != user.username) {
             toast.error("User Not authorized");
             return;
         }
         const data = {
-            _id: msg._id, 
+            chatId: msg._id, 
             userId: msg.userId,
             newMessage: newMessage
         };
         setIsLoading(true);
         try{
-            await editMessage(data); 
+            console.log(data);
+            const response = await editMessage(data); 
+            console.log(response);
             toast.success("Successfully Edited Message");
             fetchMessagesLocal();
         }
@@ -314,7 +319,7 @@ const Chatroom = () => {
     if (isLoading || userLoading) return <Loader />;
     return (
         <>
-            <div className='flex justify-center mt-8'>
+            <div className='flex justify-center mt-8 mb-6'>
                 {isAdmin ? (<div className='flex justify-center'>
                     <div className="flex justify-center items-center">
                         <Button 
@@ -344,7 +349,6 @@ const Chatroom = () => {
                         </Button>
                     </div>)}
             </div>
-            <></>
             <div className="flex flex-col justify-center items-center w-screen h-80vh mt-10 mb-10">
                 <div className="bg-[#c7c7c7] w-11/12 rounded-xl max-w-[775px]">
                     <h1 className="text-5xl text-black font-extrabold text-center mt-8 pb-5 relative 
@@ -369,8 +373,8 @@ const Chatroom = () => {
                                         {msg.username === user.username ? (
                                             <div className='max-w-72 custom2:max-w-lg flex items-center justify-center self-end'>
                                                 <div className='flex items-center justify-center opacity-0 group-hover:opacity-100 mr-3'>
-                                                    <FaPenToSquare className="mr-3 cursor-pointer text-slate-600 text-xl" onClick={()=>{setSelectedMessage(msg);setIsDialogOpen(true)}}/>
-                                                    <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setSelectedMessage(msg);setIsAlertDialogOpen(true)}}/>
+                                                    <FaPenToSquare className="mr-3 cursor-pointer text-slate-600 text-xl" onClick={()=>{setSelectedMessage(msg); setTimeout(() => {setEditedMessage(msg.message);}, 500); setIsDialogOpen(true)}}/>
+                                                    <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setSelectedMessage(msg); setTimeout(() => {setEditedMessage(msg.message);}, 500); setIsAlertDialogOpen(true)}}/>
                                                 </div>
                                                 <div className="bg-blue-600 py-2 px-2 rounded-xl max-w-md break-words">
                                                     <strong className="text-gray-200">{"You"}</strong>
@@ -389,7 +393,7 @@ const Chatroom = () => {
                                                 </div>
                                                 {(isAdmin) && (
                                                 <div className='flex items-center justify-center opacity-0 group-hover:opacity-100 ml-3'>
-                                                    <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setSelectedMessage(msg);setIsAlertDialogOpen(true)}}/>
+                                                    <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setSelectedMessage(msg); setTimeout(() => {setEditedMessage(msg.message);}, 500);setIsAlertDialogOpen(true)}}/>
                                                 </div>)}
                                             </div>
                                         )}

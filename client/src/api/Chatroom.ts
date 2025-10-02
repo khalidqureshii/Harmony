@@ -1,6 +1,6 @@
 import LINK from "@/store/Link";
 
-export async function deleteMessage (data: { userId: string, _id: string}) {
+export async function deleteMessage (data: { userId: string, chatId: string}) {
     const response = await fetch(LINK + "api/chat/delete", {
         method:"PATCH",
         headers:{
@@ -12,7 +12,7 @@ export async function deleteMessage (data: { userId: string, _id: string}) {
     return resp;
 }
 
-export async function editMessage (data: {_id: string, userId: string, newMessage: string}) {
+export async function editMessage (data: {chatId: string, userId: string, newMessage: string}) {
     const response = await fetch(LINK + "api/chat/update", {
         method:"PATCH",
         headers:{
