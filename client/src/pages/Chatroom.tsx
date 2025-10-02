@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
 import LINK from '../store/Link';
 import Loader from '../components/Loader';
-import { Send } from 'lucide-react';
+import { Send, X } from 'lucide-react';
 import { FaPenToSquare } from 'react-icons/fa6';
 import { FaTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
@@ -32,17 +32,91 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 // import { Label } from '@radix-ui/react-label';
-import { deleteMessage, editMessage, fetchMessages, fetchChatroom } from '@/api/Chatroom';
+import { deleteMessage, editMessage, fetchMessages, fetchChatroom, fetchApprovalRequest, approveRequest, rejectRequest, leaveChatroom } from '@/api/Chatroom';
 import { useSelector } from 'react-redux';
 import { Label } from '@/components/ui/label';
+import { deleteChatroom } from '@/api/ManageChatrooms';
 
 
 const Chatroom = () => {
     const { chatroomId } = useParams();
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
     const [messages, setMessages] = useState<MessageType[]>([]);
     const userLoading = useSelector((state: any) => state.auth.userLoading);
-    
+    const chatEndRef = useRef<HTMLDivElement | null>(null);
+    const navigate = useNavigate();
+    const user = useSelector((state:any) => state.auth.user)
+    const [chatroomData, setChatroomData] = useState<ChatroomType>({
+        _id: '',
+        chatroomName: '',
+        userId: '',
+        createdAt: new Date(Date.now()),
+    });
+    const [newMessage, setNewMessage] = useState<string>('');
+    const [areMessagesSet, setMessagesSet] = useState<boolean>(false);
+    const [socket, setSocket] = useState<Socket | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [selectedMessage, setSelectedMessage] = useState<MessageType | null>(null);
+    const [isAlertDialogOpen, setIsAlertDialogOpen] = useState<boolean>(false);
+    const [editedMessage, setEditedMessage] = useState<string>("");
+
+    const [showAdminPanel, setShowAdminPanel] = useState(false);
+    const [approvalRequests, setApprovalRequests] = useState<any[]>([]);
+
+    async function fetchApprovalRequests(chatroomId: string, userId: string){
+        setIsLoading(true);
+        try {
+            const response:any = await fetchApprovalRequest(chatroomId, userId);
+            console.log(response);
+            setApprovalRequests(response.requests);
+            toast.success("Fetched Approval Requests");
+        }
+        catch {
+            toast.error("Error Fetching Approval Requests");
+        }
+        finally {
+            setIsLoading(false);
+        }
+    }
+
+    async function approveRequests(selectedUserId:string, userId:string, chatroomId:string){
+        setIsLoading(true);
+        try {
+            console.log("Sending Data: ", chatroomId, userId, selectedUserId);
+            const response:any = await approveRequest(chatroomId, userId, selectedUserId);
+            console.log(response);
+            toast.success("Approved User");
+            fetchApprovalRequests(chatroomId, userId);
+
+        }
+        catch {
+            toast.error("Error Approving User")
+        }
+        finally {
+            setIsLoading(false);
+        }
+    }
+
+    async function rejectRequests(selectedUserId:string, userId:string, chatroomId:string){
+        setIsLoading(true);
+        try {
+            console.log("Sending Data: ", chatroomId, userId, selectedUserId);
+            const response:any = await rejectRequest(chatroomId, userId, selectedUserId);
+            console.log(response);
+            toast.success("Rejected User");
+            fetchApprovalRequests(chatroomId, userId);
+
+        }
+        catch {
+            toast.error("Error Rejecting User")
+        }
+        finally {
+            setIsLoading(false);
+        }
+    }
+
     useEffect(() => {
         if (!isLoggedIn) {
             navigate("/login"); 
@@ -50,9 +124,56 @@ const Chatroom = () => {
     }, [isLoggedIn]);
     
     useEffect(() => {
-        fetchChatroomLocal();
-        fetchMessagesLocal();
+        refreshPage();
     }, [chatroomId]);
+
+    
+    async function fetchMessagesLocal() {
+        try {
+            setIsLoading(true);
+            if (!chatroomId) {
+                throw new Error("Chatroom ID is undefined");
+            }
+            const response = await fetchMessages(chatroomId);
+            setMessages(response.chatrooms);
+            setMessagesSet(true);
+        }
+        catch (error) {
+            toast.error("Error Fetching Messages");
+        }
+        finally {
+            setIsLoading(false);
+        }
+    }
+
+    async function fetchChatroomLocal() {
+        setIsLoading(true);
+        try {
+            if (!chatroomId) {
+                throw new Error("Chatroom ID is undefined");
+            }
+            const response = await fetchChatroom(chatroomId);
+            setChatroomData(response.chatroomInfo[0]);
+            if (response.chatroomInfo[0].userId == user._id) {
+                setIsAdmin(true);
+            }
+            else setIsAdmin(false);
+        }
+        catch (error) {
+            toast.error("Error Fetching Chatroom");
+        }
+        finally {
+            setIsLoading(false);
+        }
+    }
+    
+
+    async function refreshPage() {
+        setIsLoading(true);
+        await fetchChatroomLocal();
+        await fetchMessagesLocal();
+        setIsLoading(false);
+    }
     
     useEffect(() => {
         scrollToBottom();
@@ -73,27 +194,6 @@ const Chatroom = () => {
         };
     }, [chatroomId]);
 
-    
-    
-    const chatEndRef = useRef<HTMLDivElement | null>(null);
-    const navigate = useNavigate();
-    const user = useSelector((state:any) => state.auth.user)
-    const [chatroomData, setChatroomData] = useState<ChatroomType>({
-        _id: '',
-        chatroomName: '',
-        userId: '',
-        createdAt: new Date(Date.now()),
-    });
-    const [newMessage, setNewMessage] = useState<string>('');
-    const [areMessagesSet, setMessagesSet] = useState<boolean>(false);
-    const [socket, setSocket] = useState<Socket | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [selectedMessage, setSelectedMessage] = useState<MessageType | null>(null);
-    const [isAlertDialogOpen, setIsAlertDialogOpen] = useState<boolean>(false);
-    const [editedMessage, setEditedMessage] = useState<string>("");
-
-    
     const sendMessage = () => {
         if (newMessage.trim() && socket) {
             socket.emit('sendMessage', {
@@ -179,35 +279,32 @@ const Chatroom = () => {
         }
     }
 
-    async function fetchMessagesLocal() {
+    async function DeleteChatroomForEveryone(){
+        setIsLoading(true);
         try {
-            setIsLoading(true);
-            if (!chatroomId) {
-                throw new Error("Chatroom ID is undefined");
-            }
-            const response = await fetchMessages(chatroomId);
-            setMessages(response.chatrooms);
-            setMessagesSet(true);
+            const response = await deleteChatroom({selectedChatroomId: chatroomData._id, userId: user._id});
+            if (response.ok) console.log("Ok");
+            navigate("/");
+            toast.success("Deleted Chatroom");
         }
         catch (error) {
-            toast.error("Error Fetching Messages");
+            toast.error("Error Deleting Chatroom");
         }
         finally {
             setIsLoading(false);
         }
     }
 
-    async function fetchChatroomLocal() {
+    async function LeaveChatroomForMe(){
         setIsLoading(true);
         try {
-            if (!chatroomId) {
-                throw new Error("Chatroom ID is undefined");
-            }
-            const response = await fetchChatroom(chatroomId);
-            setChatroomData(response.chatroomInfo[0]);
+            const response = await leaveChatroom(chatroomData._id, user._id);
+            if (response.ok) console.log("Ok");
+            navigate("/");
+            toast.success("Left Chatroom");
         }
         catch (error) {
-            toast.error("Error Fetching Chatroom");
+            toast.error("Error Leaving Chatroom");
         }
         finally {
             setIsLoading(false);
@@ -217,6 +314,37 @@ const Chatroom = () => {
     if (isLoading || userLoading) return <Loader />;
     return (
         <>
+            <div className='flex justify-center'>
+                {isAdmin ? (<div className='flex justify-center'>
+                    <div className="flex justify-center mt-4">
+                        <Button 
+                            className="bg-blue-600 hover:bg-blue-500 text-white mt-5 mb-8"
+                            onClick={() => {
+                                if (!showAdminPanel) fetchApprovalRequests(chatroomData._id, user._id);
+                                setShowAdminPanel(!showAdminPanel);
+                            }}
+                        >
+                            {showAdminPanel ? "Hide Admin Panel" : "Show Admin Panel"}
+                        </Button>
+                    </div>
+                    <div className="flex justify-center mt-4">
+                        <Button 
+                            className="bg-blue-600 hover:bg-blue-500 text-white mt-5 mb-8 ml-6"
+                            onClick={() => {DeleteChatroomForEveryone()}}
+                        >
+                            Delete Chatroom
+                        </Button>
+                    </div>
+                </div>) : (<div className="flex justify-center mt-4">
+                        <Button 
+                            className="bg-blue-600 hover:bg-blue-500 text-white mt-5 mb-8 ml-6"
+                            onClick={() => {LeaveChatroomForMe()}}
+                        >
+                            Leave Group
+                        </Button>
+                    </div>)}
+            </div>
+            <></>
             <div className="flex flex-col justify-center items-center w-screen h-80vh mt-10 mb-10">
                 <div className="bg-[#c7c7c7] w-11/12 rounded-xl max-w-[775px]">
                     <h1 className="text-5xl text-black font-extrabold text-center mt-8 pb-5 relative 
@@ -259,7 +387,7 @@ const Chatroom = () => {
                                                     <p className="text-white">{msg.message}</p>
                                                     <p className="text-right text-xs text-gray-200">{returnDisplayTime(msg.timestamp)}</p>
                                                 </div>
-                                                {(user.isAdmin) && (
+                                                {(isAdmin) && (
                                                 <div className='flex items-center justify-center opacity-0 group-hover:opacity-100 ml-3'>
                                                     <FaTrashAlt className="text-slate-600 text-xl cursor-pointer" onClick={()=>{setSelectedMessage(msg);setIsAlertDialogOpen(true)}}/>
                                                 </div>)}
@@ -294,6 +422,45 @@ const Chatroom = () => {
                         </button>
                     </div>
                 </div>
+                {showAdminPanel && (
+                    <div className="bg-white shadow-lg rounded-xl mt-6 p-6 w-11/12 max-w-[775px] mb-10">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-xl font-bold text-gray-700">Approval Requests</h2>
+                            <X className="cursor-pointer text-gray-600" onClick={() => setShowAdminPanel(false)} />
+                        </div>
+
+                        {isLoading ? (
+                            <p>Loading requests...</p>
+                        ) : (approvalRequests!=null && approvalRequests.length === 0) ? (
+                            <p className="text-gray-500">No approval requests at the moment.</p>
+                        ) : (
+                            <ul className="space-y-3">
+                                {approvalRequests.map((req) => (
+                                    <li 
+                                        key={req._id} 
+                                        className="flex justify-between items-center bg-gray-100 rounded-lg p-3"
+                                    >
+                                        <span>{req.username} wants to join {req.chatroomName}</span>
+                                        <div className="flex gap-2">
+                                            <Button 
+                                                onClick={() => approveRequests(req.userId, user._id, chatroomData._id)} 
+                                                className="bg-blue-600 hover:bg-blue-500 text-white"
+                                            >
+                                                Approve
+                                            </Button>
+                                            <Button 
+                                                onClick={() => rejectRequests(req.userId, user._id, chatroomData._id)} 
+                                                className="bg-red-600 hover:bg-red-500 text-white"
+                                            >
+                                                Reject
+                                            </Button>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                )}
             </div>
 
             <AlertDialog open={isAlertDialogOpen} onOpenChange={setIsAlertDialogOpen}>
