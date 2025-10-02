@@ -314,11 +314,11 @@ const Chatroom = () => {
     if (isLoading || userLoading) return <Loader />;
     return (
         <>
-            <div className='flex justify-center'>
+            <div className='flex justify-center mt-8'>
                 {isAdmin ? (<div className='flex justify-center'>
-                    <div className="flex justify-center mt-4">
+                    <div className="flex justify-center items-center">
                         <Button 
-                            className="bg-blue-600 hover:bg-blue-500 text-white mt-5 mb-8"
+                            className="bg-blue-600 hover:bg-blue-500 text-white"
                             onClick={() => {
                                 if (!showAdminPanel) fetchApprovalRequests(chatroomData._id, user._id);
                                 setShowAdminPanel(!showAdminPanel);
@@ -327,17 +327,17 @@ const Chatroom = () => {
                             {showAdminPanel ? "Hide Admin Panel" : "Show Admin Panel"}
                         </Button>
                     </div>
-                    <div className="flex justify-center mt-4">
+                    <div className="flex justify-center items-center">
                         <Button 
-                            className="bg-blue-600 hover:bg-blue-500 text-white mt-5 mb-8 ml-6"
+                            className="bg-blue-600 hover:bg-blue-500 text-white ml-6"
                             onClick={() => {DeleteChatroomForEveryone()}}
                         >
                             Delete Chatroom
                         </Button>
                     </div>
-                </div>) : (<div className="flex justify-center mt-4">
+                </div>) : (<div className="flex justify-center">
                         <Button 
-                            className="bg-blue-600 hover:bg-blue-500 text-white mt-5 mb-8 ml-6"
+                            className="bg-blue-600 hover:bg-blue-500 text-white"
                             onClick={() => {LeaveChatroomForMe()}}
                         >
                             Leave Group
