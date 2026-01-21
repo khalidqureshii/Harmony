@@ -17,7 +17,7 @@ const PORT = 5000;
 
 
 app.use(cors({
-    origin: ["http://localhost:5173", "https://chime-topaz.vercel.app"], 
+    origin: ["http://localhost:5173", "https://harmony-topaz.vercel.app"], 
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],  
     allowedHeaders: ["Content-Type", "Authorization"], 
     exposedHeaders: ["Content-Length", "X-Response-Time"], 
@@ -28,7 +28,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: ["http://localhost:5173", "https://chime-topaz.vercel.app"],   // Replace with your frontend's URL
+        origin: ["http://localhost:5173", "https://harmony-topaz.vercel.app"],   // Replace with your frontend's URL
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Allowed methods
         credentials: true, // Enable for authentication
     },
