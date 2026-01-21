@@ -207,12 +207,14 @@ function Home() {
                                         onChange={(e) => setChatroomName(e.target.value)}
                                         placeholder="Room name..."
                                         className="
-                                        w-64
+                                        w-96
                                         bg-white/20 
                                         border-white/30 
                                         text-white 
                                         placeholder:text-white/70
                                         text-center
+                                        mb-2
+                                        mt-1
                                         "
                                     />
                                     </div>
