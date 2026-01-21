@@ -64,7 +64,7 @@ function Register() {
             <img src="registerImage.png" style={{ width: "35rem", height: "auto", objectFit: "contain" }} className="hidden custom:block"/>
             <div className="flex flex-col justify-center items-center text-center mx-20">
                 <img src="logo.png" style={{ width: "3rem", height: "auto", objectFit: "contain" }} />
-                <h1 className="text-5xl mb-10 text-black font-logo font-bold">Chime</h1>
+                <h1 className="text-5xl mb-10 text-black font-logo font-bold">Harmony</h1>
                 <InputEntry changeFunction={updateUser} name="username" text="Username" placeholder="Username" value={user.username} /> 
                 <InputEntry changeFunction={updateUser} name="email" text="Email" placeholder="Email" value={user.email} />
                 <InputEntryPassword changeFunction={updateUser} name="password" text="Password" placeholder="Password" value={user.password} />
