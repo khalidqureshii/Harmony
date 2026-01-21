@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from "react-toastify";
 import AddHeader from "@/components/headers/AddHeader";
-import { MessageSquarePlus } from "lucide-react";
+import { Users } from "lucide-react";
 import { CardType } from "../store/Types";
 import { createChatroom, fetchChatroomsForUser, requestToJoinChatroom } from "@/api/Home";
 import { useSelector } from "react-redux";
@@ -194,7 +194,8 @@ function Home() {
                                 >
                                     {/* Title Row */}
                                     <div className="flex items-center justify-center mb-3 gap-2">
-                                    <MessageSquarePlus className="w-7 h-7" />
+                                    <Users className="w-8 h-8" />
+
                                     <h2 className="text-2xl font-bold">
                                         Create Chatroom
                                     </h2>
