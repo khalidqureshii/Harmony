@@ -173,7 +173,7 @@ function Home() {
                             </TabsContent>
 
                             {/* ADD CHATROOM - SAME COLOR SYSTEM */}
-                            <TabsContent value="add" className="flex justify-center items-start mt-6">
+                            <TabsContent value="add" className="flex justify-center items-start mt-3">
                                 <div
                                     className={`
                                     ${addCardColor}
